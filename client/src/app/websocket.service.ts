@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { map, tap, retryWhen, delayWhen } from 'rxjs/operators';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/share';
+import 'rxjs/add/operator/retryWhen';
+import 'rxjs/add/operator/delay';
 import { QueueingSubject } from 'queueing-subject'
 import websocketConnect from 'rxjs-websockets'
 
 @Injectable()
-export class WsService {
+export class WebSocketService {
   private inputStream: QueueingSubject<string>
   public messages: Observable<object>
   public connectionStatus: Observable<number>
@@ -13,7 +16,7 @@ export class WsService {
   private static readonly URL = "ws://127.0.0.1/" //window.location.host;
 
   constructor() {
-    this.connect();
+    //this.connect();
   }
 
   public connect() {
@@ -21,9 +24,9 @@ export class WsService {
       return
 
     this.inputStream = new QueueingSubject<string>()
-    const { connectionStatus, messages } = websocketConnect(WsService.URL, this.inputStream)
+    const { connectionStatus, messages } = websocketConnect(WebSocketService.URL, this.inputStream)
     this.connectionStatus = connectionStatus
-    this.messages = messages.retryWhen(errors => errors.delay(1000))
+    this.messages = messages.retryWhen(errors => errors.delay(10000))
         .map(message => message === 'pong' ? message : JSON.parse(message))
         .share();
 

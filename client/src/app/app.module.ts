@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ChatPageComponent } from './chat-page/chat-page.component';
 import { LoginComponent } from './login/login.component';
-
+import { WebSocketService } from './websocket.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import { LoginComponent } from './login/login.component';
     MatCardModule,
     MatSlideToggleModule
   ],
-  providers: [],
+  providers: [WebSocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
