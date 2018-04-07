@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ChatPageComponent } from './chat-page/chat-page.component';
 import { LoginComponent } from './login/login.component';
 import { WebSocketService } from './websocket.service';
+import { UserService } from './user.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { WebSocketService } from './websocket.service';
     MatCardModule,
     MatSlideToggleModule
   ],
-  providers: [WebSocketService],
+  providers: [WebSocketService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
