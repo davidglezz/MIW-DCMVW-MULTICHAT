@@ -87,11 +87,6 @@ function checkAuth(ws, command) {
   if (ws.user || command.topic === 'none' || (command.topic === 'user' && 'register|login'.indexOf(command.fn) >= 0))
     return true;
 
-  ws.send(JSON.stringify({
-    topic: 'user',
-    fn: 'requestAuth',
-    args: []
-  }))
-
+  ws.send(JSON.stringify(new Command('user', 'requestAuth', [])))
   return false;
 }
