@@ -20,7 +20,7 @@ export class LoginComponent {
   }
 
   register(user: string, pass: string) {
-    this.userService.login(user, pass);
+    this.userService.register(user, pass);
   }
 
 }

@@ -7,13 +7,13 @@
           <input matInput placeholder="Usuario" #user>
         </mat-form-field>
         <mat-form-field class="full-width">
-          <input matInput placeholder="Contraseña" #pass>
+          <input matInput type="password" placeholder="Contraseña" #pass>
         </mat-form-field>
       </form>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button color="primary" (click)='login(user.value, pass.value)'>Entrar</button>
-      <button mat-button>Registrarse</button>
+      <button mat-button (click)='register(user.value, pass.value)'>Registrarse</button>
     </mat-card-actions>
   </mat-card>
 </div>
