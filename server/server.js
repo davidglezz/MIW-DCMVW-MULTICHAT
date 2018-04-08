@@ -28,7 +28,7 @@ const wss = new WebSocket.Server({ server })
 // Broadcast to all.
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
-    if (client.readyState === WebSocket.OPEN) {
+    if (client.readyState === WebSocket.OPEN && client.user) {
       client.send(JSON.stringify(data));
     }
   });
@@ -43,7 +43,9 @@ const controllers = {
   'notfound': function (message) {
     console.error('No existe un manejador para el mensaje:', message)
   },
-  'user': require('./controller/user')
+  'user': require('./controller/user'),
+  'canvas': require('./controller/canvas'),
+  'chat': require('./controller/chat')
 }
 
 wss.on('connection', function connection(ws, req) {
@@ -57,6 +59,9 @@ wss.on('connection', function connection(ws, req) {
 
   ws.on('message', async function incoming(message) {
     const cmd = getCommand(message)
+    if (!checkAuth(this, cmd)) {
+      return
+    }
     const controller = controllers[cmd.topic] ? controllers[cmd.topic] : controllers['notfound']
     const res = typeof controller === 'function' ? await controller.apply(this, [cmd.fn]) : await controller[cmd.fn].apply(this, cmd.args)
     if (res) {
@@ -76,4 +81,17 @@ function getCommand(message) {
     } catch (err) { }
   }
   return { topic: 'none', fn: message };
+}
+
+function checkAuth(ws, command) {
+  if (ws.user || command.topic === 'none' || (command.topic === 'user' && 'register|login'.indexOf(command.fn) >= 0))
+    return true;
+
+  ws.send(JSON.stringify({
+    topic: 'user',
+    fn: 'requestAuth',
+    args: []
+  }))
+
+  return false;
 }
