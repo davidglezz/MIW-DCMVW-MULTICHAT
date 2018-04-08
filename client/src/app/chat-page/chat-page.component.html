@@ -1,20 +1,13 @@
 <mat-list class="message-list">
-  <h3 mat-subheader>Folders</h3>
-  <mat-list-item *ngFor="let folder of folders">
-    <mat-icon mat-list-icon>folder</mat-icon>
-    <h4 mat-line>{{folder.name}}</h4>
-    <p mat-line> {{folder.updated | date}} </p>
-  </mat-list-item>
-  <mat-divider></mat-divider>
-  <h3 mat-subheader>Notes</h3>
-  <mat-list-item *ngFor="let note of notes">
-    <mat-icon mat-list-icon>note</mat-icon>
-    <h4 mat-line>{{note.name}}</h4>
-    <p mat-line> {{note.updated | date}} </p>
+  <mat-list-item *ngFor="let message of messages">
+    <mat-icon mat-list-icon *ngIf="message.type=='text'">face</mat-icon>
+    <mat-icon mat-list-icon *ngIf="message.type=='notify'">notifications</mat-icon>
+    <p mat-line><strong *ngIf="message.type=='text'">{{message.name}}: </strong>{{message.text}}</p>
   </mat-list-item>
 </mat-list>
 <div class="new-message">
-  <mat-form-field>
-    <input matInput placeholder="Mensaje" value="">
+  <mat-form-field class="input-message">
+    <input matInput placeholder="Mensaje" (keydown.enter)="sendMessage(message.value); message.value=''" #message>
   </mat-form-field>
+  <button mat-button (click)="sendMessage(message.value); message.value=''"><mat-icon mat-list-icon>send</mat-icon></button>
 </div>

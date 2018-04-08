@@ -1,10 +1,17 @@
 .message-list {
     margin-bottom: 4rem;
+    background: #fff;
 }
 
 .new-message {
+    background: #fff;
     height: 4rem;
     position: fixed;
     bottom: 0;
-    width: 100%;
+    width: calc(100% - 32px - 214px);
+    padding: 0 16px;
+}
+
+.new-message .input-message {
+    width: calc(100% - 96px);
 }
