@@ -5,7 +5,6 @@ module.exports = (function userFunctions() {
   async function login(username, password) {
     try {
       var user = await User.findOne({ username, password });
-      console.log(user)
     } catch (ex) {
       return {
         topic: 'alert',
@@ -22,8 +21,11 @@ module.exports = (function userFunctions() {
       }
     }
 
+    this.id = user._id
+    this.user = user
+
     this.server.broadcast({
-      topic: 'status',
+      topic: 'user',
       fn: 'userConnect',
       args: [this.id, username]
     })
@@ -47,7 +49,7 @@ module.exports = (function userFunctions() {
       }
     }
     this.server.broadcast({
-      topic: 'status',
+      topic: 'user',
       fn: 'newUser',
       args: [this.id, username]
     })
