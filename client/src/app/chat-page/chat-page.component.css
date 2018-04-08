@@ -1,0 +1,10 @@
+.message-list {
+    margin-bottom: 4rem;
+}
+
+.new-message {
+    height: 4rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
