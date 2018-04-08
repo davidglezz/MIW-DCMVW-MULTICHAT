@@ -2,10 +2,41 @@
   <mat-toolbar-row>
     <span>WebRTC-Chat</span>
     <span class="app-toolbar-filler"></span>
-    <mat-slide-toggle color="accent" [(ngModel)]="isDev">Dev Features</mat-slide-toggle>
+    <span *ngIf="userService.isLoggedIn">{{userService.currentUser.name}}</span>
+    <span class="app-toolbar-filler"></span>
+
+    <!--<mat-slide-toggle color="accent" [(ngModel)]="isDev">Dev Features</mat-slide-toggle>-->
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="app-content">
-  <router-outlet></router-outlet>
-</div>
+<mat-sidenav-container class="app-content">
+  <mat-sidenav mode="side" [opened]="userService.isLoggedIn">
+    <mat-nav-list>
+      <h3 matSubheader>General</h3>
+      <a mat-list-item routerLinkActive="sidenav-item-selected" href="/chat" [routerLink]="['/chat']">
+        <mat-icon mat-list-icon>forum</mat-icon>
+        <span mat-line>Chat Room</span>
+      </a>
+      <a mat-list-item routerLinkActive="sidenav-item-selected" href="/canvas" [routerLink]="['/canvas']">
+        <mat-icon mat-list-icon>brush</mat-icon>
+        <span mat-line>Lienzo compartido</span>
+      </a>
+      <mat-divider></mat-divider>
+      <h3 matSubheader>Usuarios Conectados</h3>
+      <a *ngFor="let user of userService.allUsers" mat-list-item routerLinkActive="sidenav-item-selected" [routerLink]="['/p2p-chat', user.name]">
+        <mat-icon mat-list-icon>face</mat-icon>
+        <span mat-line>{{user.name}}</span>
+      </a>
+      <mat-divider></mat-divider>
+      <h3 matSubheader>About</h3>
+      <a mat-list-item routerLinkActive="sidenav-item-selected" href="/about" [routerLink]="['/about']">
+        <mat-icon mat-list-icon>help</mat-icon>
+        <span mat-line>Information</span>
+      </a>
+
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
