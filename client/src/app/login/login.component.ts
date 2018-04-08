@@ -10,10 +10,7 @@ import { UserService } from '../user.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  private socketSubscription: Subscription;
-
   constructor(private userService: UserService) { }
-
 
   login(user: string, pass: string) {
     this.userService.login(user, pass);
@@ -22,5 +19,4 @@ export class LoginComponent {
   register(user: string, pass: string) {
     this.userService.register(user, pass);
   }
-
 }

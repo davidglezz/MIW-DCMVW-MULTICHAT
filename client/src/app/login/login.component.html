@@ -2,7 +2,7 @@
   <mat-card flex="flex">
     <mat-card-title>Identifícate</mat-card-title>
     <mat-card-content>
-      <form name="login-form">
+      <form name="login-form" (keydown.enter)="login(user.value, pass.value)">
         <mat-form-field class="full-width">
           <input matInput placeholder="Usuario" #user>
         </mat-form-field>
