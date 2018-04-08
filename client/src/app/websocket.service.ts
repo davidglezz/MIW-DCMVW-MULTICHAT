@@ -25,10 +25,10 @@ export class WebSocketService {
 
   constructor() {
     this.getTopic('none').subscribe(message => {
-      console.log('Mensaje de texto recibido:', message)
+      console.log('Mensaje de texto recibido:', message.fn)
     })
     this.getTopic('notfound').subscribe(message => {
-      console.error('No existe un manejador para el mensaje:', message)
+      console.log('No existe un manejador para el mensaje:', message)
     })
 
     this.connect();
