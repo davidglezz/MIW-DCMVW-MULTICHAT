@@ -49,9 +49,13 @@ export class UserService implements OnDestroy {
     this.currentUser = { id, name }
     this.isLoggedIn = true
     if (userlist) {
-      this.allUsers = userlist
+      this.updateUserList(userlist)
     }
     this.router.navigate(['chat'])
+  }
+
+  private updateUserList(userlist: User[]) {
+    this.allUsers = userlist
   }
 
   private newUser(id: string, name: string) {
