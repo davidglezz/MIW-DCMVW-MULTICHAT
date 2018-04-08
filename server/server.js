@@ -34,13 +34,13 @@ wss.broadcast = function broadcast(data) {
   });
 };
 
-wss.getUniqueID = function b(a) { return a ? (0 | Math.random() * 16).toString(16) : ("" + 1e7 + -1e3 + -4e3 + -8e3 + -1e11).replace(/1|0/g, b) }
+wss.getUniqueID = function b(a) { return a ? (0 | Math.random() * 16).toString(16) : ("guest-" + 1e7).replace(/1|0/g, b) }
 
 const controllers = {
-  'none': (message) => {
+  'none': function (message) {
     console.log('[%s] Mensaje de texto recibido: %s', this.id, message)
   },
-  'notfound': (message) => {
+  'notfound': function (message) {
     console.error('No existe un manejador para el mensaje:', message)
   },
   'user': require('./controller/user')
