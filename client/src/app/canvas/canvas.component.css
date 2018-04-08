@@ -1,0 +1,12 @@
+.mat-button {
+    min-width: auto;
+}
+
+.mat-button.active {
+    color: #ff4081;
+}
+
+#canvas, #canvas-wrapper {
+    width: 100%;
+    height: calc(100% - 4rem - 4px); /* no se de donde salen los 4px  */
+}

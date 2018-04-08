@@ -1,8 +1,16 @@
 <mat-toolbar class="app-canvas-toolbar">
   <mat-toolbar-row>
-    <span>WebRTC-Chat</span>
+    <button mat-button><mat-icon>crop_square</mat-icon></button>
+    <button mat-button><mat-icon>panorama_fish_eye</mat-icon></button>
+    <button mat-button><mat-icon>details</mat-icon></button>
+    <button mat-button [class.active]="canvas.isDrawingMode" (click)="canvas.isDrawingMode = !canvas.isDrawingMode"><mat-icon>edit</mat-icon></button>
+    <button mat-button><mat-icon>color_lens</mat-icon></button>
+
     <span class="app-toolbar-filler"></span>
     <span class="app-toolbar-filler"></span>
 
   </mat-toolbar-row>
 </mat-toolbar>
+<div id="canvas-wrapper" (dragover)="false" (dragend)="false" (drop)="handleDrop($event)">
+  <canvas id="canvas"></canvas>
+</div>
