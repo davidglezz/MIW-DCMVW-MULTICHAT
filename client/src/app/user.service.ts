@@ -15,14 +15,9 @@ export class UserService implements OnDestroy {
   constructor(private webSocketService: WebSocketService, private router: Router) {
     this.webSocketService.connect()
     this.socketSubscription = this.webSocketService.getTopic('user').subscribe((message: Command) => {
-      console.log(message)
       if (this[message.fn])
         this[message.fn].apply(this, message.args)
     })
-    // this.webSocketService.send({msg:'Hello'})
-
-    this.allUsers.push({id: 'test1', name: 'test1'});
-    this.allUsers.push({id: 'test2', name: 'test2'});
   }
 
   public login(user: string, pass: string) {
@@ -39,8 +34,7 @@ export class UserService implements OnDestroy {
       fn: 'logout',
       args: [this.currentUser.id]
     })
-    this.currentUser = undefined;
-    this.router.navigate(['login'])
+    this.requestAuth()
   }
 
   public register(user: string, pass: string) {
@@ -51,22 +45,32 @@ export class UserService implements OnDestroy {
     })
   }
 
-  private loggedin(id: string, name: string) {
-    this.currentUser = {id, name}
+  private loggedin(id: string, name: string, userlist?: User[]) {
+    this.currentUser = { id, name }
     this.isLoggedIn = true
+    if (userlist) {
+      this.allUsers = userlist
+    }
     this.router.navigate(['chat'])
   }
 
   private newUser(id: string, name: string) {
-    this.allUsers.push({id, name});
+    this.allUsers.push({ id, name })
   }
 
   private userConnect(id: string, name: string) {
-    this.allUsers.push({id, name});
+    this.allUsers.push({ id, name })
   }
 
   private userDisconnect(id: string, name: string) {
     // TODO
+  }
+
+  public requestAuth() {
+    this.isLoggedIn = false
+    this.currentUser = undefined
+    this.allUsers = []
+    this.router.navigate(['login'])
   }
 
   ngOnDestroy() {
