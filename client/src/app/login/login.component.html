@@ -12,8 +12,10 @@
       </form>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button color="primary" (click)='login(user.value, pass.value)'>Entrar</button>
-      <button mat-button (click)='register(user.value, pass.value)'>Registrarse</button>
+      <button mat-button color="primary" (click)="login(user.value, pass.value)">Entrar</button>
+      <button mat-button (click)="register(user.value, pass.value)">Registrarse</button>
+      <button mat-button (click)="login('david', 'david')">David</button>
+      <button mat-button (click)="login('test', 'test')">Test</button>
     </mat-card-actions>
   </mat-card>
 </div>
