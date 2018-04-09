@@ -52,5 +52,5 @@ module.exports = (function userFunctions() {
     return new Command('user', 'updateUserList', [getUserList(this.server)])
   }
   
-  return { login, register }
+  return { login, register, logout }
 })()
