@@ -3,6 +3,7 @@ const http = require('http')
 const url = require('url')
 const WebSocket = require('ws')
 const mongoose = require('mongoose');
+const Command = require('./model/command');
 
 /* Connect to database */
 (async function () {
@@ -26,9 +27,9 @@ const server = http.createServer(app)
 const wss = new WebSocket.Server({ server })
 
 // Broadcast to all.
-wss.broadcast = function broadcast(data) {
+wss.broadcast = function broadcast(data, notme) {
   wss.clients.forEach(function each(client) {
-    if (client.readyState === WebSocket.OPEN && client.user) {
+    if (client.readyState === WebSocket.OPEN && client.user && client !== notme) {
       client.send(JSON.stringify(data));
     }
   });
