@@ -47,7 +47,8 @@ const controllers = {
   },
   'user': require('./controller/user'),
   'canvas': require('./controller/canvas'),
-  'chat': require('./controller/chat')
+  'chat': require('./controller/chat'),
+  'p2pchat': require('./controller/p2pchat'),
 }
 
 wss.on('connection', function connection(ws, req) {
