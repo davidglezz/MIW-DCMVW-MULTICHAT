@@ -11,6 +11,7 @@ const Command = require('./model/command');
   const db = mongoose.connection
   db.on('error', err => console.error('connection error:', err))
   db.once('open', () => console.info('Connected to the database.'))
+  db.once('disconnected', () => console.info('Disconnected from the database.'))
 })()
 
 
