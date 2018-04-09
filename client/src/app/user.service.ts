@@ -34,7 +34,7 @@ export class UserService implements OnDestroy {
       fn: 'logout',
       args: [this.currentUser.id]
     })
-    this.requestAuth()
+    //this.requestAuth()
   }
 
   public register(user: string, pass: string) {
@@ -67,7 +67,7 @@ export class UserService implements OnDestroy {
   }
 
   private userDisconnect(id: string, name: string) {
-    // TODO
+    this.allUsers = this.allUsers.filter(u => u.name !== name)
   }
 
   public requestAuth() {
