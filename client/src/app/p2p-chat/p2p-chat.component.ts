@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { WebSocketService } from '../websocket.service';
+import { Subscription } from 'rxjs/Subscription';
+import { Command } from '../models/Command';
 
 @Component({
   selector: 'app-p2p-chat',
@@ -6,15 +9,29 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./p2p-chat.component.css']
 })
 export class P2pChatComponent implements OnInit {
+  private socketSubscription: Subscription;
   localPeerConnection: RTCPeerConnection
   remotePeerConnection: RTCPeerConnection
   remoteaudio: HTMLAudioElement
   stream: MediaStream | void
   remoteUsername: String
 
-  constructor() { }
+  constructor(private webSocketService: WebSocketService) {
+    if (typeof RTCPeerConnection == "undefined")
+      RTCPeerConnection = webkitRTCPeerConnection;
+
+    this.webSocketService.connect()
+    this.socketSubscription = this.webSocketService.getTopic('p2pchat').subscribe((message: Command) => {
+      if (this[message.fn])
+        this[message.fn].apply(this, message.args)
+    })
+  }
 
   async ngOnInit() {
+    this.listdevices()
+  }
+
+  async listdevices() {
     // List cameras and microphones.
     const devices = await navigator.mediaDevices.enumerateDevices().catch(console.error)
     if (devices) {
@@ -49,9 +66,6 @@ export class P2pChatComponent implements OnInit {
   }
 
   call() {
-    if (typeof RTCPeerConnection == "undefined")
-      RTCPeerConnection = webkitRTCPeerConnection;
-
     //This is an optional configuration string, associated with NAT traversal setup
     const configuration = null;
     this.localPeerConnection = new RTCPeerConnection(configuration);
@@ -60,23 +74,37 @@ export class P2pChatComponent implements OnInit {
     this.remotePeerConnection.onicecandidate = this.gotRemoteIceCandidate.bind(this);
     this.remotePeerConnection.onaddstream = this.gotRemoteStream.bind(this);
     console.log("Created local and remote peer connection objects");
-    this.localPeerConnection.addStream(theStream);
+    this.localPeerConnection.addStream(this.stream);
     console.log("Added localStream to localPeerConnection");
     this.localPeerConnection.createOffer(this.gotLocalDescription.bind(this), this.onSignalingError.bind(this));
   }
 
   public hangup() {
     console.log("Ending call");
-    //hangupButton.disabled = true;
-    //callButton.disabled = false;
-
-    //Close PeerConnection(s)
     this.localPeerConnection.close();
-    this.remotePeerConnection.close();
-    //Reset local variables
     this.localPeerConnection = null;
-    this.remotePeerConnection = null;
+    this.webSocketService.send(new Command('p2pchat', 'leave', []))
   }
+
+  /****** Server messages hendlers ******/
+
+  private onOffer(offer, source) {
+    this.startingCallCommunication();
+    this.remoteUsername = source;
+    this.localPeerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+    this.localPeerConnection.createAnswer(answer => {
+      this.localPeerConnection.setLocalDescription(answer);
+      this.webSocketService.send(new Command('p2pchat', 'answer', [answer]))
+    }, console.error);
+  }
+
+  private onAnswer(answer) {
+    this.localPeerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+  };
+
+  private onCandidate(candidate) {
+    this.localPeerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+  };
 
 
   /****** Events hendlers ******/
@@ -88,29 +116,16 @@ export class P2pChatComponent implements OnInit {
   }
 
   private gotLocalDescription(description) {
+    this.webSocketService.send(new Command('p2pchat', 'offer', [description]))
     this.localPeerConnection.setLocalDescription(description);
-    this.remotePeerConnection.setRemoteDescription(description);
-    //Create the Answer to the received Offer based on the 'local' description
-    this.remotePeerConnection.createAnswer(this.gotRemoteDescription.bind(this), this.onSignalingError.bind(this));
   }
-/*
-  private gotRemoteDescription(description) {
-    this.remotePeerConnection.setLocalDescription(description);
-    this.localPeerConnection.setRemoteDescription(description);
-  }
-*/
+
   private gotLocalIceCandidate(event) {
     if (event.candidate) {
-      this.remotePeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
+      this.webSocketService.send(new Command('p2pchat', 'candidate', [event.candidate]))
     }
   }
-/*
-  private gotRemoteIceCandidate(event) {
-    if (event.candidate) {
-      this.localPeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
-    }
-  }
-*/
+
   private onSignalingError(error) {
     console.log('Failed to create signaling message : ' + error.name);
   }
