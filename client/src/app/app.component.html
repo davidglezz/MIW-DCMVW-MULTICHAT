@@ -1,10 +1,10 @@
 <mat-toolbar color="primary" class="app-toolbar">
   <mat-toolbar-row>
-    <span>WebRTC-Chat</span>
+    <span>WebSocket-WebRTC-Chat</span>
     <span class="app-toolbar-filler"></span>
     <span *ngIf="userService.isLoggedIn">{{userService.currentUser.name}}</span>
     <span class="app-toolbar-filler"></span>
-
+    <button *ngIf="userService.isLoggedIn" mat-button (click)='userService.logout()'>Salir</button>
     <!--<mat-slide-toggle color="accent" [(ngModel)]="isDev">Dev Features</mat-slide-toggle>-->
   </mat-toolbar-row>
 </mat-toolbar>
