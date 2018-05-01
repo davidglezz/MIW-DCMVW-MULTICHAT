@@ -10,6 +10,10 @@ module.exports = (function userFunctions() {
   }
 
   async function login(username, password) {
+    if (!username || !password) {
+      return new Command('alert', 'showMessage', ['Prueba a escribir un usuario y contraseña.'])
+    }
+
     try {
       var user = await User.findOne({ username, password });
     } catch (ex) {
@@ -27,6 +31,10 @@ module.exports = (function userFunctions() {
   }
 
   async function register(username, password) {
+    if (!username || !password) {
+      return new Command('alert', 'showMessage', ['Prueba a escribir un usuario y contraseña.'])
+    }
+    
     var user = User({ username, password })
     try {
       const res = await user.save()
