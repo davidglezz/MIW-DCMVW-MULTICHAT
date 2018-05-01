@@ -21,8 +21,8 @@
   "dependencies": {
     "express": "^4.16.3",
     "fabric": "^2.2.3",
-    "mongodb": "^3.0.5",
-    "mongoose": "^5.0.13",
-    "ws": "^5.1.0"
+    "mongodb": "^3.0.7",
+    "mongoose": "^5.0.17",
+    "ws": "^5.1.1"
   }
 }
