@@ -21,6 +21,9 @@ export class UserService implements OnDestroy {
   }
 
   public login(user: string, pass: string) {
+    if (!user || ! pass)
+      return
+    
     this.webSocketService.send({
       topic: 'user',
       fn: 'login',
@@ -38,6 +41,9 @@ export class UserService implements OnDestroy {
   }
 
   public register(user: string, pass: string) {
+    if (!user || ! pass)
+      return
+    
     this.webSocketService.send({
       topic: 'user',
       fn: 'register',

@@ -13,10 +13,12 @@ export class LoginComponent {
   constructor(private userService: UserService) { }
 
   login(user: string, pass: string) {
-    this.userService.login(user, pass);
+    if (user && pass)
+      this.userService.login(user, pass);
   }
 
   register(user: string, pass: string) {
-    this.userService.register(user, pass);
+    if (user && pass)
+      this.userService.register(user, pass);
   }
 }
