@@ -53,13 +53,9 @@ export class WebSocketService {
         }
         return {topic: 'none', fn:message};
       })
-      .subscribe((message: Command) => {
-        if (message && message.topic && this.topics[message.topic]) {
-          this.topics[message.topic].next(message)
-        } else {
-          this.topics['notfound'].next(message)
-        }
-      })
+      .subscribe((message: Command) => 
+        this.topics[message && message.topic ? message.topic : 'notfound'].next(message)
+      )
 
     this.pingTimer = window.setInterval(() => this.outgoing.next('ping'), 30000);
   }
