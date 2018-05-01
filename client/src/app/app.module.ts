@@ -12,7 +12,7 @@ import { WebSocketService } from './websocket.service';
 import { UserService } from './user.service';
 import { P2pChatComponent } from './p2p-chat/p2p-chat.component';
 import { RouteReuseStrategy } from '@angular/router';
-import { CustomReuseStrategy } from './CustomReuseStrategy';
+import { CustomReuseStrategy } from './customReuseStrategy';
 import { CanvasComponent } from './canvas/canvas.component';
 
 @NgModule({
