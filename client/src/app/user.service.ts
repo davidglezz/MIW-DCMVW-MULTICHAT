@@ -20,6 +20,10 @@ export class UserService implements OnDestroy {
     })
   }
 
+  public getUsers(withCurrent = true) {
+    return withCurrent ? this.allUsers : this.allUsers.filter(u => u.id != this.currentUser.id)
+  }
+
   public login(user: string, pass: string) {
     if (!user || ! pass)
       return

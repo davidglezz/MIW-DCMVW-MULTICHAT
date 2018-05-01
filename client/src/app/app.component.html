@@ -23,7 +23,7 @@
       </a>
       <mat-divider></mat-divider>
       <h3 matSubheader>Usuarios Conectados</h3>
-      <a *ngFor="let user of userService.allUsers" mat-list-item routerLinkActive="sidenav-item-selected" [routerLink]="['/p2p-chat', user.name]">
+      <a *ngFor="let user of userService.getUsers(false)" mat-list-item routerLinkActive="sidenav-item-selected" [routerLink]="['/p2p-chat', user.name]">
         <mat-icon mat-list-icon>face</mat-icon>
         <span mat-line>{{user.name}}</span>
       </a>
