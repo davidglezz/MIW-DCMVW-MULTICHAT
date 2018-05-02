@@ -27,11 +27,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
     })
   }
 
-  ngOnInit() {
-    if (!this.userService.isLoggedIn) {
-      this.userService.requestAuth()
-    }
-  }
+  ngOnInit() {  }
 
   addMessage(type, name, text) {
     this.messages.push({type, name, text})

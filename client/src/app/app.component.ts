@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { WebSocketService } from './websocket.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -10,7 +10,7 @@ import { UserService } from './user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnDestroy, OnInit {
   private socketSubscription: Subscription;
   constructor(private webSocketService: WebSocketService, private snackBar: MatSnackBar, private userService: UserService) {
     this.webSocketService.connect()
@@ -18,6 +18,12 @@ export class AppComponent implements OnDestroy {
       if (this[message.fn])
         this[message.fn].apply(this, message.args)
     })
+  }
+
+  ngOnInit() {
+    if (!this.userService.isLoggedIn) {
+      this.userService.requestAuth()
+    }
   }
 
   showMessage(message) {
