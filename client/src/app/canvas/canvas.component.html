@@ -1,13 +1,27 @@
 <mat-toolbar class="app-canvas-toolbar">
   <mat-toolbar-row>
-    <button mat-button><mat-icon>crop_square</mat-icon></button>
-    <button mat-button><mat-icon>panorama_fish_eye</mat-icon></button>
-    <button mat-button><mat-icon>details</mat-icon></button>
-    <button mat-button [class.active]="canvas.isDrawingMode" (click)="canvas.isDrawingMode = !canvas.isDrawingMode"><mat-icon>edit</mat-icon></button>
-    <button mat-button><mat-icon>color_lens</mat-icon></button>
-
+    <button mat-button (click)="drawObject('Rect')">
+      <mat-icon>crop_square</mat-icon>
+    </button>
+    <button mat-button (click)="drawObject('Circle')">
+      <mat-icon>panorama_fish_eye</mat-icon>
+    </button>
+    <button mat-button (click)="drawObject('Triangle')">
+      <mat-icon>details</mat-icon>
+    </button>
+    <button mat-button [class.active]="canvas.isDrawingMode" (click)="toggleDrawingMode()">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button mat-button [matMenuTriggerFor]="colorpicker">
+      <mat-icon [style.color]="colorFill">color_lens</mat-icon><!-- format_color_fill -->
+    </button>
+    <mat-menu #colorpicker class="color-picker">
+      <button *ngFor="let color of colors" mat-menu-item (click)="setFillColor(color)" class="color-picker-item" [style.background-color]="color"></button>
+    </mat-menu>
     <span class="app-toolbar-filler"></span>
-    <span class="app-toolbar-filler"></span>
+    <button mat-button (click)="removeSelected()">
+      <mat-icon>delete</mat-icon>
+    </button>
 
   </mat-toolbar-row>
 </mat-toolbar>
