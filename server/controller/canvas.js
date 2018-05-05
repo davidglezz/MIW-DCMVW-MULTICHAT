@@ -9,15 +9,17 @@ const fabric = require('fabric').fabric;
 
 module.exports = (function userFunctions() {
 
-  function addObjects(objs) {   
-    console.log(objs) 
+  function addObjects(objs) {
     this.server.broadcast(new Command('canvas', 'addObjects', [objs]), this)
   }
 
   function removeObjects(ids) {
-    console.log(ids) 
     this.server.broadcast(new Command('canvas', 'removeObjects', [ids]), this)
   }
 
-  return { addObjects, removeObjects }
+  function modifyObjects(objs) {
+    this.server.broadcast(new Command('canvas', 'modifyObjects', [objs]), this)
+  }
+
+  return { addObjects, removeObjects, modifyObjects }
 })()
