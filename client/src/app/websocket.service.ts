@@ -51,11 +51,17 @@ export class WebSocketService {
             console.error('No es json:', message)
           }
         }
-        return {topic: 'none', fn:message};
+        return { topic: 'none', fn: message };
       })
-      .subscribe((message: Command) => 
-        this.topics[message && message.topic ? message.topic : 'notfound'].next(message)
-      )
+      .subscribe((message: Command) => {
+        let topic: string
+        if (message && message.topic) {
+          topic = this.topics[message.topic] ? message.topic : 'notfound'
+        } else {
+          topic = 'none'
+        }
+        this.topics[topic].next(message)
+      })
 
     this.pingTimer = window.setInterval(() => this.outgoing.next('ping'), 30000);
   }
