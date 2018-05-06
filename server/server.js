@@ -71,6 +71,8 @@ wss.on('connection', function connection(ws, req) {
       this.send(JSON.stringify(res))
     }
   })
+
+  ws.send(JSON.stringify(new Command('user', 'requestAuth', [])))
 })
 
 server.listen(port, () => console.log('Listening on %d', server.address().port))
