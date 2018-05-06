@@ -7,12 +7,10 @@ module.exports = (function userFunctions() {
   canvas.renderOnAddRemove = false
 
   function getCanvas() {
-    console.log("getCanvas.")
     return new Command('canvas', 'setCanvas', [canvas.toObject(['id'])])
   }
 
   function addObjects(objects) {
-    console.log("addObjects", objects.map( o => o.id))
     fabric.util.enlivenObjects(objects, objs => {
       canvas.add.apply(canvas, objs)
     })
@@ -20,13 +18,11 @@ module.exports = (function userFunctions() {
   }
 
   function removeObjects(ids) {
-    console.log("removeObjects", ids)
     canvas.remove.apply(canvas, canvas.getObjects().filter(obj => ids.includes(obj.id)))
     this.server.broadcast(new Command('canvas', 'removeObjects', [ids]), this)
   }
 
   function modifyObjects(objects) {
-    console.log("modifyObjects", objects.map( o => o.id))
     objects.forEach(obj => {
       const theObj = canvas.getObjects().find(o => o.id === obj.id)
       if (theObj) {

@@ -46,7 +46,6 @@ export class CanvasComponent implements OnInit {
   }
 
   setCanvas(json) {
-    console.log(json)
     this.canvas.loadFromJSON(json, () => {
       this.canvas.requestRenderAll()
       this.canvas.on({
@@ -57,7 +56,6 @@ export class CanvasComponent implements OnInit {
         'object:scaling': this.onObjectModified.bind(this),
         'object:rotating': this.onObjectModified.bind(this),
         'object:skewing': this.onObjectModified.bind(this),
-        //'path:created': console.log,
         'object:selected': e => this.selectedObject = e.target,
         'object:cleared': () => this.selectedObject = null,
       })
@@ -66,7 +64,6 @@ export class CanvasComponent implements OnInit {
   }
 
   onObjectAdded(args) {
-    console.log('onObjectAdded', args)
     if (!args.target.id) {
       args.target.id = this.generateId()
       this.webSocketService.send({
@@ -74,12 +71,10 @@ export class CanvasComponent implements OnInit {
         fn: 'addObjects',
         args: [[args.target.toObject(['id', 'type'])]]
       })
-      console.log('Object Added')
     }
   }
 
   onObjectRemoved(args) {
-    console.log('onObjectRemoved', args)
     return
     this.webSocketService.send({
       topic: 'canvas',
@@ -96,9 +91,6 @@ export class CanvasComponent implements OnInit {
       data = args.path ? [args.path.toObject(['id'])] : args.map(o => o.toObject(['id']))
     }
 
-    console.log('onObjectModified', args, data.map(o => o.id))
-
-    //const objs = args.getObjects()
     this.webSocketService.send({
       topic: 'canvas',
       fn: 'modifyObjects',
@@ -119,7 +111,6 @@ export class CanvasComponent implements OnInit {
   }
 
   addObjects(objects) {
-    console.log("addObjects", objects.map(o => o.id))
     fabric.util.enlivenObjects(objects, objs => {
       const origRenderOnAddRemove = this.canvas.renderOnAddRemove
       this.canvas.renderOnAddRemove = false
@@ -130,12 +121,10 @@ export class CanvasComponent implements OnInit {
   }
 
   removeObjects(ids) {
-    console.log("removeObjects", ids)
     this.canvas.remove.apply(this.canvas, this.canvas.getObjects().filter(obj => ids.includes(obj.id)))
   }
 
   modifyObjects(objects) {
-    console.log("modifyObjects", objects.map(o => o.id))
     objects.forEach(obj => {
       const theObj = this.canvas.getObjects().find(o => o.id === obj.id)
       if (theObj) {
@@ -213,6 +202,4 @@ export class CanvasComponent implements OnInit {
   toJSON() {
     return this.canvas.toJSON()
   }
-
-
 }
