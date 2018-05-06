@@ -4,7 +4,7 @@ import { UserService } from '../user.service';
 import { WebSocketService } from '../websocket.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Command } from '../models/Command';
-//import fabric = require('fabric/fabric-impl');
+
 declare const fabric: any;
 
 @Component({
@@ -17,10 +17,10 @@ export class CanvasComponent implements OnInit {
   private socketSubscription: Subscription
   private canvas
   private wrapper: HTMLElement
-
-  private colors = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', 
-                    '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722', '#795548', '#9E9E9E', 
-                    '#607D8B', '#FFFFFF', '#000000']
+  private selectedObject = null
+  private colors = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688',
+    '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722', '#795548', '#9E9E9E',
+    '#607D8B', '#FFFFFF', '#000000']
   private colorFill = '#3F51B5'
   private lineWidth = 10
 
@@ -38,20 +38,78 @@ export class CanvasComponent implements OnInit {
     this.onResize()
     window.addEventListener('resize', this.onResize.bind(this), false);
 
-    this.canvas.on({
-      'object:modified': this.onObjectModified.bind(this)
+    this.webSocketService.send({
+      topic: 'canvas',
+      fn: 'getCanvas',
+      args: []
     })
+  }
 
+  setCanvas(json) {
+    console.log(json)
+    this.canvas.loadFromJSON(json, () => {
+      this.canvas.requestRenderAll()
+      this.canvas.on({
+        'object:added': this.onObjectAdded.bind(this),
+        'object:removed': this.onObjectRemoved.bind(this),
+        'object:modified': this.onObjectModified.bind(this),
+        'object:moving': this.onObjectModified.bind(this),
+        'object:scaling': this.onObjectModified.bind(this),
+        'object:rotating': this.onObjectModified.bind(this),
+        'object:skewing': this.onObjectModified.bind(this),
+        //'path:created': console.log,
+        'object:selected': e => this.selectedObject = e.target,
+        'object:cleared': () => this.selectedObject = null,
+      })
+      this.loaded = true
+    })
+  }
+
+  onObjectAdded(args) {
+    console.log('onObjectAdded', args)
+    if (!args.target.id) {
+      args.target.id = this.generateId()
+      this.webSocketService.send({
+        topic: 'canvas',
+        fn: 'addObjects',
+        args: [[args.target.toObject(['id', 'type'])]]
+      })
+      console.log('Object Added')
+    }
+  }
+
+  onObjectRemoved(args) {
+    console.log('onObjectRemoved', args)
+    return
+    this.webSocketService.send({
+      topic: 'canvas',
+      fn: 'removeObjects',
+      args: [[args.target.id]]
+    })
   }
 
   onObjectModified(args) {
-    console.log(args)
+    let data;
+    if (args.target) {
+      data = args.target.getObjects ? args.target.getObjects().map(o => o.toObject(['id'])) : [args.target.toObject(['id'])]
+    } else {
+      data = args.path ? [args.path.toObject(['id'])] : args.map(o => o.toObject(['id']))
+    }
+
+    console.log('onObjectModified', args, data.map(o => o.id))
+
+    //const objs = args.getObjects()
+    this.webSocketService.send({
+      topic: 'canvas',
+      fn: 'modifyObjects',
+      args: [data]
+    })
   }
 
   onResize() {
     this.canvas.setHeight(this.wrapper.clientHeight)
     this.canvas.setWidth(this.wrapper.clientWidth)
-    this.canvas.renderAll();
+    this.canvas.requestRenderAll();
   }
 
   toggleDrawingMode() {
@@ -60,43 +118,39 @@ export class CanvasComponent implements OnInit {
     this.canvas.isDrawingMode = !this.canvas.isDrawingMode
   }
 
-  
   addObjects(objects) {
+    console.log("addObjects", objects.map(o => o.id))
     fabric.util.enlivenObjects(objects, objs => {
-      var origRenderOnAddRemove = this.canvas.renderOnAddRemove;
-      this.canvas.renderOnAddRemove = false;
-      console.log(objs)
-      this.canvas.add.apply(this.canvas, objs)    
-      this.canvas.renderOnAddRemove = origRenderOnAddRemove;
-      this.canvas.renderAll();
-    });
+      const origRenderOnAddRemove = this.canvas.renderOnAddRemove
+      this.canvas.renderOnAddRemove = false
+      this.canvas.add.apply(this.canvas, objs)
+      this.canvas.renderOnAddRemove = origRenderOnAddRemove
+      this.canvas.requestRenderAll()
+    })
   }
 
   removeObjects(ids) {
+    console.log("removeObjects", ids)
     this.canvas.remove.apply(this.canvas, this.canvas.getObjects().filter(obj => ids.includes(obj.id)))
   }
 
   modifyObjects(objects) {
+    console.log("modifyObjects", objects.map(o => o.id))
+    objects.forEach(obj => {
+      const theObj = this.canvas.getObjects().find(o => o.id === obj.id)
+      if (theObj) {
+        theObj.set(obj)
+      } // TODO else add
+    })
+    this.canvas.requestRenderAll()
   }
 
   drawObject(type, data) {
-    if (!data) {
-      data = this.getNewObjectData(type)
-    }
-
-    const shape = new fabric[type](data)
-    this.canvas.add(shape)
-
-    this.webSocketService.send({
-      topic: 'canvas',
-      fn: 'addObjects',
-      args: [[shape.toObject(['id'])]]
-    })
+    this.canvas.add(new fabric[type](data || this.getNewObjectData(type)))
   }
 
   getNewObjectData(type) {
     const data: any = {
-      id: this.userService.currentUser.id + '-' + Base64.fromNumber(Date.now()),
       width: 100,
       height: 100,
       left: this.wrapper.clientWidth / 2 - 50,
@@ -111,19 +165,24 @@ export class CanvasComponent implements OnInit {
     return data
   }
 
+  generateId() {
+    return this.userService.currentUser.id + '-' + Base64.fromNumber(Date.now())
+  }
+
   setFillColor(color) {
     this.colorFill = color
     this.canvas.freeDrawingBrush.color = color
     const objects = this.canvas.getActiveObjects()
     objects.forEach(obj => obj.set('fill', this.colorFill))
-    this.canvas.renderAll()
+    this.canvas.requestRenderAll()
+    this.onObjectModified(objects)
   }
 
   removeSelected() {
     const objects = this.canvas.getActiveObjects()
     this.canvas.discardActiveObject()
     this.canvas.remove.apply(this.canvas, objects)
-    
+
     this.webSocketService.send({
       topic: 'canvas',
       fn: 'removeObjects',
@@ -134,23 +193,20 @@ export class CanvasComponent implements OnInit {
   handleDrop(e) {
     const file = e.dataTransfer.files[0];
     const reader = new FileReader();
-
-    reader.onload = (imgFile) => {
-      console.log(imgFile)
+    reader.onload = imgFile => {
       const data = imgFile.target["result"];
-      fabric.Image.fromURL(data, (img) => {
+      fabric.Image.fromURL(data, img => {
         let oImg = img.set({
           left: 0,
           top: 0,
           angle: 0
         }).scale(1);
-        this.canvas.add(oImg).renderAll();
+        this.canvas.add(oImg).requestRenderAll();
         var a = this.canvas.setActiveObject(oImg);
         var dataURL = this.canvas.toDataURL({ format: 'png', quality: 0.8 });
       });
     };
     reader.readAsDataURL(file);
-
     return false;
   }
 
