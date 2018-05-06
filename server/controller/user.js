@@ -1,5 +1,6 @@
 const User = require('../persistence/user');
 const Command = require('../model/command');
+const WebSocket = require('ws')
 
 module.exports = (function userFunctions() {
 
@@ -23,6 +24,16 @@ module.exports = (function userFunctions() {
     if (!user) {
       return new Command('alert', 'showMessage', ['Usuario o contraseña incorrectos.'])
     }
+
+    // Disconnect logged in sessions
+    [...this.server.clients].forEach(client => {
+      if (client.readyState === WebSocket.OPEN && client.user && client.user.username === user.username) {
+        client.server.broadcast(new Command('user', 'userDisconnect', [client.id, client.user.username]))
+        client.user = undefined
+        client.id = client.server.getUniqueID()
+        client.send(JSON.stringify(new Command('user', 'requestAuth', [])))
+      }
+    })
 
     this.id = user._id
     this.user = user
@@ -53,6 +64,7 @@ module.exports = (function userFunctions() {
   async function logout(id) {
     this.server.broadcast(new Command('user', 'userDisconnect', [this.id, this.user.username]))
     this.user = undefined
+    this.id = this.server.getUniqueID()
     return new Command('user', 'requestAuth', [])
   }
 
