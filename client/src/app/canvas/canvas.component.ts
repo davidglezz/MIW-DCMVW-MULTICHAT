@@ -76,11 +76,11 @@ export class CanvasComponent implements OnInit {
 
   onObjectRemoved(args) {
     return
-    this.webSocketService.send({
+    /*this.webSocketService.send({
       topic: 'canvas',
       fn: 'removeObjects',
       args: [[args.target.id]]
-    })
+    })*/
   }
 
   onObjectModified(args) {
