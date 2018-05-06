@@ -13,7 +13,8 @@ declare const fabric: any;
   styleUrls: ['./canvas.component.css']
 })
 export class CanvasComponent implements OnInit {
-  private socketSubscription: Subscription;
+  private loaded = false
+  private socketSubscription: Subscription
   private canvas
   private wrapper: HTMLElement
 

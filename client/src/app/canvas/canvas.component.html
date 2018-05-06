@@ -1,4 +1,4 @@
-<mat-toolbar class="app-canvas-toolbar">
+<mat-toolbar class="app-canvas-toolbar" *ngIf="loaded; else isLoading;">
   <mat-toolbar-row>
     <button mat-button (click)="drawObject('Rect')">
       <mat-icon>crop_square</mat-icon>
@@ -13,7 +13,8 @@
       <mat-icon>edit</mat-icon>
     </button>
     <button mat-button [matMenuTriggerFor]="colorpicker">
-      <mat-icon [style.color]="colorFill">color_lens</mat-icon><!-- format_color_fill -->
+      <mat-icon [style.color]="colorFill">color_lens</mat-icon>
+      <!-- format_color_fill -->
     </button>
     <mat-menu #colorpicker class="color-picker">
       <button *ngFor="let color of colors" mat-menu-item (click)="setFillColor(color)" class="color-picker-item" [style.background-color]="color"></button>
@@ -22,9 +23,14 @@
     <button mat-button (click)="removeSelected()">
       <mat-icon>delete</mat-icon>
     </button>
-
   </mat-toolbar-row>
 </mat-toolbar>
 <div id="canvas-wrapper" (dragover)="false" (dragend)="false" (drop)="handleDrop($event)">
   <canvas id="canvas"></canvas>
 </div>
+
+<ng-template #isLoading>
+  <div class="loading-wrapper">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
