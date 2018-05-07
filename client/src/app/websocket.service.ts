@@ -63,7 +63,7 @@ export class WebSocketService {
         this.topics[topic].next(message)
       })
 
-    this.pingTimer = window.setInterval(() => this.outgoing.next('ping'), 30000);
+    this.pingTimer = window.setInterval(() => this.outgoing.next('ping'), 25000);
   }
 
   public getTopic(topic: string): Subject<Command> {

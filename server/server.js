@@ -36,11 +36,28 @@ wss.broadcast = function broadcast(data, notme) {
   });
 };
 
+// close missed connections
+wss.clean = function clean() {
+  console.log('Limpieza de usuarios sin conexion...')
+  const now = Date.now()
+  wss.clients.forEach(function each(client) {
+    if (client.readyState === WebSocket.OPEN && client.heartbeat + 30000 < now) {
+      console.log('[%s] Esta inactivo: %s', client.id, (now - client.heartbeat - 30000) / 1000)
+      if (client.user) {
+        wss.broadcast(new Command('user', 'userDisconnect', [client.id, client.user.username]))
+      }
+      client.user = undefined
+      client.id = wss.getUniqueID()
+    }
+  });
+};
+
 wss.getUniqueID = function b(a) { return a ? (0 | Math.random() * 16).toString(16) : ("guest-" + 1e7).replace(/1|0/g, b) }
 
 const controllers = {
   'none': function (message) {
-    console.log('[%s] Mensaje de texto recibido: %s', this.id, message)
+    if (message !== 'ping')
+      console.log('[%s] Mensaje de texto recibido: %s', this.id, message)
   },
   'notfound': function (message) {
     console.error('No existe un manejador para el mensaje:', message)
@@ -58,9 +75,15 @@ wss.on('connection', function connection(ws, req) {
 
   ws.on('close', function close() {
     console.log('disconnected: %s', this.id)
+    if (this.user) {
+      this.server.broadcast(new Command('user', 'userDisconnect', [this.id, this.user.username]))
+    }
+    this.user = undefined
+    this.id = this.server.getUniqueID()
   })
 
   ws.on('message', async function incoming(message) {
+    this.heartbeat = Date.now()
     const cmd = getCommand(message)
     if (!checkAuth(this, cmd)) {
       return
@@ -77,6 +100,8 @@ wss.on('connection', function connection(ws, req) {
 
 server.listen(port, () => console.log('Listening on %d', server.address().port))
 
+const autoCloseCheckerTimer = setInterval(wss.clean, 30000)
+
 function getCommand(message) {
   if (message[0] === '{' || message[0] === '[') {
     try {
@@ -89,7 +114,7 @@ function getCommand(message) {
 }
 
 function checkAuth(ws, command) {
-  if (ws.user || command.topic === 'none' || (command.topic === 'user' && 'register|login'.indexOf(command.fn) >= 0))
+  if (ws.user || command.topic === 'none' || (command.topic === 'user' && 'register|login'.includes(command.fn)))
     return true;
 
   ws.send(JSON.stringify(new Command('user', 'requestAuth', [])))
