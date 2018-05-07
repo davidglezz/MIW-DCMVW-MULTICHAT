@@ -20,7 +20,7 @@ const app = express()
 const port = process.env.PORT || '80'
 app.set('port', port)
 app.use(express.static(__dirname + '/static'))
-app.get('/', function (req, res) {
+app.get('*', function (req, res) {
   res.sendfile('static/index.html')
 })
 
