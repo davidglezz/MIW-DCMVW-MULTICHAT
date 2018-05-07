@@ -18,7 +18,7 @@
         <mat-icon [style.color]="colorFill">more_horiz</mat-icon>
       </button>
       <mat-menu #sampleUsersMenu>
-        <button *ngFor="let user of sampleUsers" mat-menu-item (click)="login(user, user)">{{user}}</button>
+        <button *ngFor="let user of sampleUsers" mat-menu-item (tap)="login(user, user)">{{user}}</button>
       </mat-menu>
 
       
