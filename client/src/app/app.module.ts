@@ -14,6 +14,8 @@ import { P2pChatComponent } from './p2p-chat/p2p-chat.component';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './customReuseStrategy';
 import { CanvasComponent } from './canvas/canvas.component';
+import 'hammerjs';
+import 'hammer-timejs';
 
 @NgModule({
   declarations: [
