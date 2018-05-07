@@ -32,7 +32,7 @@
            </button>-->
         </a>
       </ng-container>
-      <a mat-list-item *ngIf="userService.allUsers.length < 2">
+      <a mat-list-item *ngIf="userService.allUsers.length < 2" style="pointer-events: none">
         <mat-icon mat-list-icon>face</mat-icon>
         <span mat-line>Ningún usuario</span>
       </a>
