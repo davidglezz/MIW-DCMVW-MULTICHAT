@@ -12,7 +12,7 @@ import { UserService } from './user.service';
 })
 export class AppComponent implements OnDestroy, OnInit {
   private socketSubscription: Subscription;
-  constructor(private webSocketService: WebSocketService, private snackBar: MatSnackBar, private userService: UserService) {
+  constructor(public webSocketService: WebSocketService, public snackBar: MatSnackBar, public userService: UserService) {
     this.webSocketService.connect()
     this.socketSubscription = this.webSocketService.getTopic('alert').subscribe((message: Command) => {
       if (this[message.fn])

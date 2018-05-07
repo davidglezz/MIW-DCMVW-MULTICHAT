@@ -13,15 +13,15 @@ declare const fabric: any;
   styleUrls: ['./canvas.component.css']
 })
 export class CanvasComponent implements OnInit {
-  private loaded = false
+  loaded = false
   private socketSubscription: Subscription
   private canvas
   private wrapper: HTMLElement
   private selectedObject = null
-  private colors = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688',
+  colors = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688',
     '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722', '#795548', '#9E9E9E',
     '#607D8B', '#FFFFFF', '#000000']
-  private colorFill = '#3F51B5'
+  colorFill = '#3F51B5'
   private lineWidth = 10
 
   constructor(private webSocketService: WebSocketService, private userService: UserService) {

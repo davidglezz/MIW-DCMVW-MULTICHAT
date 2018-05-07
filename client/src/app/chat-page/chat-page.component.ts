@@ -13,7 +13,7 @@ import { ChatMessage } from '../models/ChatMessage';
 export class ChatPageComponent implements OnInit, OnDestroy {
   private userSubscription: Subscription;
   private chatSubscription: Subscription;
-  private messages: ChatMessage[] = []
+  messages: ChatMessage[] = []
 
   constructor(private webSocketService: WebSocketService, private userService: UserService) {
     this.webSocketService.connect()

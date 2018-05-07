@@ -19,9 +19,9 @@ const Command = require('./model/command');
 const app = express()
 const port = process.env.PORT || '80'
 app.set('port', port)
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/static'))
 app.get('/', function (req, res) {
-  res.sendfile('public/index.html')
+  res.sendfile('static/index.html')
 })
 
 const server = http.createServer(app)

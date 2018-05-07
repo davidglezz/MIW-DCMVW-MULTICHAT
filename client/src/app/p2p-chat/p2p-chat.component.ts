@@ -12,14 +12,14 @@ import { ChatMessage } from '../models/ChatMessage';
   styleUrls: ['./p2p-chat.component.css']
 })
 export class P2pChatComponent implements OnInit {
-  private messages: ChatMessage[] = []
-  private remoteUser: String
+  messages: ChatMessage[] = []
+  remoteUser: String
   private socketSubscription: Subscription;
   localPeerConnection: RTCPeerConnection
   remotePeerConnection: RTCPeerConnection
   remoteaudio: HTMLAudioElement
   stream: MediaStream | void
-  
+
 
   constructor(private webSocketService: WebSocketService, private userService: UserService, private route: ActivatedRoute) {
     this.route.params.subscribe(params => {
@@ -39,6 +39,14 @@ export class P2pChatComponent implements OnInit {
 
   async ngOnInit() {
     this.listdevices()
+  }
+
+  sendMessage(msg) {
+    console.info("sendMessage: ", msg)
+  }
+
+  call() {
+    console.info("Call..")
   }
 
   async listdevices() {
@@ -78,7 +86,7 @@ export class P2pChatComponent implements OnInit {
     }
   }
 
-  call() {
+  call2() {
     if (!this.stream)
       return
     //This is an optional configuration string, associated with NAT traversal setup

@@ -1,10 +1,9 @@
 <mat-toolbar class="top-toolbar">
   <mat-toolbar-row>
-    Mensajes directos con <span *ngIf="remoteUser">{{remoteUser}}</span>
-
+    Mensajes directos con&nbsp;<strong *ngIf="remoteUser">{{remoteUser}}</strong>
     <span class="app-toolbar-filler"></span>
     <div class="test"></div>
-    <button mat-button (click)="drawObject('Rect')">
+    <button mat-button (click)="call()">
       <mat-icon>call</mat-icon>
     </button>
   </mat-toolbar-row>
