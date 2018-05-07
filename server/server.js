@@ -7,7 +7,7 @@ const Command = require('./model/command');
 
 /* Connect to database */
 (async function () {
-  /* await */mongoose.connect('mongodb://156.35.98.110:32768/persistence')
+  /* await */mongoose.connect('mongodb://156.35.98.110:32769/persistence')
   const db = mongoose.connection
   db.on('error', err => console.error('connection error:', err))
   db.once('open', () => console.info('Connected to the database.'))
@@ -38,11 +38,10 @@ wss.broadcast = function broadcast(data, notme) {
 
 // close missed connections
 wss.clean = function clean() {
-  console.log('Limpieza de usuarios sin conexion...')
   const now = Date.now()
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN && client.heartbeat + 30000 < now) {
-      console.log('[%s] Esta inactivo: %s', client.id, (now - client.heartbeat - 30000) / 1000)
+      console.log('[%s] Desconectado por inactividad', client.id)
       if (client.user) {
         wss.broadcast(new Command('user', 'userDisconnect', [client.id, client.user.username]))
       }
