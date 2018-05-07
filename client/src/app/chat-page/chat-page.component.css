@@ -9,9 +9,10 @@
     position: fixed;
     bottom: 0;
     width: calc(100% - 32px - 214px);
-    padding: 0 16px;
+    padding: 0 1rem;
 }
 
 .new-message .input-message {
-    width: calc(100% - 96px);
+    width: calc(100% - 72px);
+    margin-right: 1em;
 }
