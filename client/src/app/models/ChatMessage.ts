@@ -3,3 +3,5 @@ export interface ChatMessage {
   name: string
   text: string
 }
+
+// type ChatMessage = NotifyMessage | TextMessage;

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { WebSocketService } from '../websocket.service';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { WebSocketService } from '../websocket.service';
 import { Command } from '../models/Command';
+import { UserService } from '../user.service';
+import { ChatMessage } from '../models/ChatMessage';
 
 @Component({
   selector: 'app-p2p-chat',
@@ -9,15 +12,22 @@ import { Command } from '../models/Command';
   styleUrls: ['./p2p-chat.component.css']
 })
 export class P2pChatComponent implements OnInit {
+  private messages: ChatMessage[] = []
+  
   private socketSubscription: Subscription;
   localPeerConnection: RTCPeerConnection
   remotePeerConnection: RTCPeerConnection
   remoteaudio: HTMLAudioElement
   stream: MediaStream | void
-  remoteUsername: String
+  remoteUser: String
 
-  constructor(private webSocketService: WebSocketService) {
-    if (typeof RTCPeerConnection == "undefined")
+  constructor(private webSocketService: WebSocketService, private userService: UserService, private route: ActivatedRoute) {
+    this.route.params.subscribe(params => {
+      this.remoteUser = params['user']
+
+    }).unsubscribe()
+
+    if (typeof RTCPeerConnection === "undefined")
       RTCPeerConnection = webkitRTCPeerConnection;
 
     this.webSocketService.connect()
@@ -48,6 +58,9 @@ export class P2pChatComponent implements OnInit {
   }
 
   public startingCallCommunication() {
+    if (!this.stream)
+      return
+
     const configuration: RTCConfiguration = { "iceServers": [{ "urls": "stun:stun.phoneserve.com" }] } // antes era "url"
     this.localPeerConnection = new RTCPeerConnection(configuration);
     console.log("Created local peer connection object");
@@ -66,17 +79,18 @@ export class P2pChatComponent implements OnInit {
   }
 
   call() {
+    if (!this.stream)
+      return
     //This is an optional configuration string, associated with NAT traversal setup
     const configuration = null;
     this.localPeerConnection = new RTCPeerConnection(configuration);
     this.localPeerConnection.onicecandidate = this.gotLocalIceCandidate.bind(this);
-    this.remotePeerConnection = new RTCPeerConnection(configuration);
-    this.remotePeerConnection.onicecandidate = this.gotRemoteIceCandidate.bind(this);
+
     this.remotePeerConnection.onaddstream = this.gotRemoteStream.bind(this);
     console.log("Created local and remote peer connection objects");
     this.localPeerConnection.addStream(this.stream);
     console.log("Added localStream to localPeerConnection");
-    this.localPeerConnection.createOffer(this.gotLocalDescription.bind(this), this.onSignalingError.bind(this));
+    //this.localPeerConnection.createOffer(this.gotLocalDescription.bind(this), this.onSignalingError.bind(this));
   }
 
   public hangup() {
@@ -90,12 +104,12 @@ export class P2pChatComponent implements OnInit {
 
   private onOffer(offer, source) {
     this.startingCallCommunication();
-    this.remoteUsername = source;
+    //this.remoteUsername = source;
     this.localPeerConnection.setRemoteDescription(new RTCSessionDescription(offer));
-    this.localPeerConnection.createAnswer(answer => {
+    /*this.localPeerConnection.createAnswer(answer => {
       this.localPeerConnection.setLocalDescription(answer);
       this.webSocketService.send(new Command('p2pchat', 'answer', [answer]))
-    }, console.error);
+    }, console.error);*/
   }
 
   private onAnswer(answer) {

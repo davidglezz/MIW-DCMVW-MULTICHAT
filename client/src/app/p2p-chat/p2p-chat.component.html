@@ -1,3 +1,30 @@
-<p>
-  p2p-chat works!
-</p>
+<mat-toolbar class="top-toolbar">
+  <mat-toolbar-row>
+    <button mat-button (click)="drawObject('Rect')">
+      <mat-icon>crop_square</mat-icon>
+    </button>
+    <button mat-button (click)="drawObject('Circle')">
+      <mat-icon>panorama_fish_eye</mat-icon>
+    </button>
+    <button mat-button (click)="drawObject('Triangle')">
+      <mat-icon>details</mat-icon>
+    </button>
+    <span class="app-toolbar-filler"></span>
+    <button mat-button (click)="removeSelected()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-list class="message-list">
+  <mat-list-item *ngFor="let message of messages">
+    <mat-icon mat-list-icon *ngIf="message.type=='text'">face</mat-icon>
+    <mat-icon mat-list-icon *ngIf="message.type=='notify'">notifications</mat-icon>
+    <p mat-line><strong *ngIf="message.type=='text'">{{message.name}}: </strong>{{message.text}}</p>
+  </mat-list-item>
+</mat-list>
+<div class="new-message">
+  <mat-form-field class="input-message">
+    <input matInput placeholder="Mensaje" (keydown.enter)="sendMessage(message.value); message.value=''" #message>
+  </mat-form-field>
+  <button mat-button (click)="sendMessage(message.value); message.value=''"><mat-icon mat-list-icon>send</mat-icon></button>
+</div>
