@@ -13,13 +13,13 @@ import { ChatMessage } from '../models/ChatMessage';
 })
 export class P2pChatComponent implements OnInit {
   private messages: ChatMessage[] = []
-  
+  private remoteUser: String
   private socketSubscription: Subscription;
   localPeerConnection: RTCPeerConnection
   remotePeerConnection: RTCPeerConnection
   remoteaudio: HTMLAudioElement
   stream: MediaStream | void
-  remoteUser: String
+  
 
   constructor(private webSocketService: WebSocketService, private userService: UserService, private route: ActivatedRoute) {
     this.route.params.subscribe(params => {

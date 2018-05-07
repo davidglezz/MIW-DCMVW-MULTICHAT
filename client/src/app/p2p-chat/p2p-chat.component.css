@@ -1,0 +1,47 @@
+.app-toolbar-filler {
+    flex: 1 1 auto;
+}
+
+.loading-wrapper {
+    position: absolute;
+    top: calc(50% - 50px);
+    left: calc(50% - 50px);
+}
+
+.mat-button {
+    min-width: auto;
+}
+
+.mat-button.active {
+    color: #ff4081;
+}
+
+.message-list {
+    margin-bottom: 4rem;
+    background: #fff;
+}
+
+.new-message {
+    background: #fff;
+    height: 4rem;
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 32px - 214px);
+    padding: 0 1rem;
+}
+
+.new-message .input-message {
+    width: calc(100% - 72px);
+    margin-right: 1em;
+}
+
+
+.test {
+    width: 300px;
+    height: 200px;
+    position: relative;
+    margin-right: 1rem;
+    background: #aaa;
+    top: 107%;
+    display: none;
+}

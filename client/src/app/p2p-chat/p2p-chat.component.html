@@ -1,17 +1,11 @@
 <mat-toolbar class="top-toolbar">
   <mat-toolbar-row>
-    <button mat-button (click)="drawObject('Rect')">
-      <mat-icon>crop_square</mat-icon>
-    </button>
-    <button mat-button (click)="drawObject('Circle')">
-      <mat-icon>panorama_fish_eye</mat-icon>
-    </button>
-    <button mat-button (click)="drawObject('Triangle')">
-      <mat-icon>details</mat-icon>
-    </button>
+    Mensajes directos con <span *ngIf="remoteUser">{{remoteUser}}</span>
+
     <span class="app-toolbar-filler"></span>
-    <button mat-button (click)="removeSelected()">
-      <mat-icon>delete</mat-icon>
+    <div class="test"></div>
+    <button mat-button (click)="drawObject('Rect')">
+      <mat-icon>call</mat-icon>
     </button>
   </mat-toolbar-row>
 </mat-toolbar>
