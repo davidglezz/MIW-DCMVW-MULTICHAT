@@ -10,6 +10,8 @@ import { UserService } from '../user.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  private sampleUsers = ['david', 'susana', 'ana', 'adrian', 'test']
+
   constructor(private userService: UserService) { }
 
   login(user: string, pass: string) {
