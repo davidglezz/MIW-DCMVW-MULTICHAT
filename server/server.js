@@ -7,7 +7,7 @@ const Command = require('./model/command');
 
 /* Connect to database */
 (async function () {
-  /* await */mongoose.connect('mongodb://156.35.98.110:32769/persistence')
+  /* await */mongoose.connect('mongodb://156.35.98.110:32768/persistence')
   const db = mongoose.connection
   db.on('error', err => console.error('connection error:', err))
   db.once('open', () => console.info('Connected to the database.'))
