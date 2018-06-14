@@ -29,13 +29,17 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {  }
 
-  addMessage(type, name, text) {
-    this.messages.push({type, name, text})
+  addMessage(name, text) {
+    this.messages.push({type: 'text', name, text})
+  }
+
+  addNotify(text) {
+    this.messages.push({type: 'notify', text})
   }
 
   sendMessage(text) {
     if (text) {
-      this.addMessage('text', this.userService.currentUser.name, text);
+      this.addMessage(this.userService.currentUser.name, text);
       this.webSocketService.send({
         topic: 'chat',
         fn: 'addMessage',
@@ -45,7 +49,7 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   private loggedin(id: string, name: string) {
-    this.addMessage('notify', name, 'Te has conectado');
+    this.addNotify('Te has conectado');
   }
 
   private requestAuth(id: string, name: string) {
@@ -53,15 +57,15 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   private newUser(id: string, name: string) {
-    this.addMessage('notify', name, 'Dad la bienvenida a ' + name);
+    this.addNotify('Dad la bienvenida a ' + name);
   }
 
   private userConnect(id: string, name: string) {
-    this.addMessage('notify', name, name + ' se ha conectado.');
+    this.addNotify(name + ' se ha conectado.');
   }
 
   private userDisconnect(id: string, name: string) {
-    this.addMessage('notify', name, name + ' se ha desconectado.');
+    this.addNotify(name + ' se ha desconectado.');
   }
 
   ngOnDestroy() {

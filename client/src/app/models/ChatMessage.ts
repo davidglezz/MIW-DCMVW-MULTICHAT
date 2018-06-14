@@ -1,7 +1,13 @@
-export interface ChatMessage {
-  type: 'notify' | 'text'
+
+export type ChatMessage = NotifyMessage | TextMessage;
+
+export interface TextMessage {
+  type: 'text'
   name: string
   text: string
 }
 
-// type ChatMessage = NotifyMessage | TextMessage;
+export interface NotifyMessage {
+  type: 'notify'
+  text: string
+}
