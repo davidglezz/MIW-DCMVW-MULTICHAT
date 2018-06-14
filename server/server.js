@@ -36,6 +36,14 @@ wss.broadcast = function broadcast(data, notme) {
   });
 };
 
+// Send data to some user
+wss.send = function send(data, userId) {
+  const client = wss.clients.find(client => client.id === userId)
+  if (client && client.readyState === WebSocket.OPEN) {
+    client.send(JSON.stringify(data));
+  }
+};
+
 // close missed connections
 wss.clean = function clean() {
   const now = Date.now()
