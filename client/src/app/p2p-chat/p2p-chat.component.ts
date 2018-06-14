@@ -6,6 +6,11 @@ import { Command } from '../models/Command';
 import { UserService } from '../user.service';
 import { ChatMessage } from '../models/ChatMessage';
 
+
+/**
+ * Debido a que la API RTCDataChannel (https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel)
+ * todavía es poco soportada por los navegadores, los mensajes de texto serán enviados mediante websokets.
+ */
 @Component({
   selector: 'app-p2p-chat',
   templateUrl: './p2p-chat.component.html',
@@ -19,7 +24,6 @@ export class P2pChatComponent implements OnInit {
   remotePeerConnection: RTCPeerConnection
   remoteaudio: HTMLAudioElement
   stream: MediaStream | void
-
 
   constructor(private webSocketService: WebSocketService, private userService: UserService, private route: ActivatedRoute) {
     this.route.params.subscribe(params => {
