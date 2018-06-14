@@ -19,9 +19,9 @@ const Command = require('./model/command');
 const app = express()
 const port = process.env.PORT || '80'
 app.set('port', port)
-app.use(express.static(__dirname + '/static'))
+app.use(express.static(__dirname + '/public'))
 app.get('*', function (req, res) {
-  res.sendfile('static/index.html')
+  res.sendfile('public/index.html')
 })
 
 const server = http.createServer(app)
@@ -40,11 +40,9 @@ wss.broadcast = function broadcast(data, notme) {
 wss.clean = function clean() {
   const now = Date.now()
   wss.clients.forEach(function each(client) {
-    if (client.readyState === WebSocket.OPEN && client.heartbeat + 30000 < now) {
+    if (client.readyState === WebSocket.OPEN && client.user && client.heartbeat + 30000 < now) {
       console.log('[%s] Desconectado por inactividad', client.id)
-      if (client.user) {
-        wss.broadcast(new Command('user', 'userDisconnect', [client.id, client.user.username]))
-      }
+      wss.broadcast(new Command('user', 'userDisconnect', [client.id, client.user.username]))
       client.user = undefined
       client.id = wss.getUniqueID()
     }
