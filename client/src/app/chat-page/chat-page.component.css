@@ -13,6 +13,6 @@
 }
 
 .new-message .input-message {
-    width: calc(100% - 72px);
+    width: calc(100% - 88px - 1rem);
     margin-right: 1em;
 }
