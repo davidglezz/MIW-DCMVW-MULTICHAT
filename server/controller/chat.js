@@ -3,9 +3,13 @@ const Command = require('../model/command');
 
 module.exports = (function userFunctions() {
 
-  function addMessage(message) {    
-    this.server.broadcast(new Command('chat', 'addMessage', ['text', this.user.username, message]), this)
+  function notify(message) {    
+    this.server.broadcast(new Command('chat', 'notify', [message]), this)
   }
-  
-  return { addMessage }
+
+  function message(message) {    
+    this.server.broadcast(new Command('chat', 'message', [this.user.username, message]), this)
+  }
+
+  return { notify, message }
 })()

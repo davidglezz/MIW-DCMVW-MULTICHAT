@@ -29,27 +29,27 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {  }
 
-  addMessage(name, text) {
+  message(name, text) {
     this.messages.push({type: 'text', name, text})
   }
 
-  addNotify(text) {
+  notify(text) {
     this.messages.push({type: 'notify', text})
   }
 
   sendMessage(text) {
     if (text) {
-      this.addMessage(this.userService.currentUser.name, text);
+      this.message(this.userService.currentUser.name, text);
       this.webSocketService.send({
         topic: 'chat',
-        fn: 'addMessage',
+        fn: 'message',
         args: [text]
       })
     }
   }
 
   private loggedin(id: string, name: string) {
-    this.addNotify('Te has conectado');
+    this.notify('Te has conectado');
   }
 
   private requestAuth(id: string, name: string) {
@@ -57,15 +57,15 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   }
 
   private newUser(id: string, name: string) {
-    this.addNotify('Dad la bienvenida a ' + name);
+    this.notify('Dad la bienvenida a ' + name);
   }
 
   private userConnect(id: string, name: string) {
-    this.addNotify(name + ' se ha conectado.');
+    this.notify(name + ' se ha conectado.');
   }
 
   private userDisconnect(id: string, name: string) {
-    this.addNotify(name + ' se ha desconectado.');
+    this.notify(name + ' se ha desconectado.');
   }
 
   ngOnDestroy() {
