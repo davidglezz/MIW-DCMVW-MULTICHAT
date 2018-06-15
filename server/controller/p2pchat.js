@@ -1,3 +1,4 @@
+const Command = require('../model/command');
 
 module.exports = (function userFunctions() {
 
@@ -21,5 +22,11 @@ module.exports = (function userFunctions() {
     
   }
 
-  return { login, offer, answer, candidate, leave}
+  function message(username, message) {
+    console.log(`p2pchat message from ${this.user.username} to ${username}: ${message}`)
+    this.server.sendToUser(username, new Command('p2pchat', 'message', [this.user.username, message]))
+  }
+  
+
+  return { message, login, offer, answer, candidate, leave}
 })()

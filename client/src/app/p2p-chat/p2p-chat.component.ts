@@ -17,9 +17,12 @@ import { ChatMessage } from '../models/ChatMessage';
   styleUrls: ['./p2p-chat.component.css']
 })
 export class P2pChatComponent implements OnInit {
+  private userSubscription: Subscription;
+  private p2pchatSubscription: Subscription;
   messages: ChatMessage[] = []
   remoteUser: String
-  private socketSubscription: Subscription;
+
+  // WebRTC
   localPeerConnection: RTCPeerConnection
   remotePeerConnection: RTCPeerConnection
   remoteaudio: HTMLAudioElement
@@ -31,22 +34,66 @@ export class P2pChatComponent implements OnInit {
 
     }).unsubscribe()
 
-    if (typeof RTCPeerConnection === "undefined")
-      RTCPeerConnection = webkitRTCPeerConnection;
-
     this.webSocketService.connect()
-    this.socketSubscription = this.webSocketService.getTopic('p2pchat').subscribe((message: Command) => {
+    this.userSubscription = this.webSocketService.getTopic('user').subscribe((message: Command) => {
       if (this[message.fn])
         this[message.fn].apply(this, message.args)
     })
+    this.p2pchatSubscription = this.webSocketService.getTopic('p2pchat').subscribe((message: Command) => {
+      if (this[message.fn])
+        this[message.fn].apply(this, message.args)
+    })
+
+    // WebRTC
+    if (typeof RTCPeerConnection === "undefined")
+      RTCPeerConnection = webkitRTCPeerConnection;
+  }
+  
+  message(name, text) {
+    console.log(name, text)
+    if (name === this.remoteUser)
+      this.messages.push({type: 'text', name, text})
   }
 
+  notify(name, text) {
+    if (name === this.remoteUser)
+      this.messages.push({type: 'notify', text})
+  }
+
+  sendMessage(text) {
+    if (text) {
+      this.message(this.userService.currentUser.name, text);
+      this.webSocketService.send({
+        topic: 'p2pchat',
+        fn: 'message',
+        args: [this.remoteUser, text]
+      })
+    }
+  }
+
+  private requestAuth(id: string, name: string) {
+    this.messages = [];
+  }
+
+  private userConnect(id: string, name: string) {
+    if (name === this.remoteUser)
+      this.notify(name, name + ' se ha conectado.');
+  }
+
+  private userDisconnect(id: string, name: string) {
+    if (name === this.remoteUser)
+      this.notify(name, name + ' se ha desconectado.');
+  }
+
+  ngOnDestroy() {
+    this.userSubscription.unsubscribe()
+    this.p2pchatSubscription.unsubscribe()
+    console.log('Salió del chat con ' + this.remoteUser)
+  }
+
+  // WebRTC
   async ngOnInit() {
     this.listdevices()
-  }
-
-  sendMessage(msg) {
-    console.info("sendMessage: ", msg)
   }
 
   call() {

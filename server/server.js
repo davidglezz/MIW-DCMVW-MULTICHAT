@@ -37,8 +37,11 @@ wss.broadcast = function broadcast(data, notme) {
 };
 
 // Send data to some user
-wss.send = function send(data, userId) {
-  const client = wss.clients.find(client => client.id === userId)
+wss.sendToUser = function sendToUser(userId, data) {
+  console.log(wss.send instanceof Function, wss.clients instanceof Array)
+  //const client = wss.clients.find(client => client.id === userId)
+  const client = Array.prototype.find.call(wss.clients, client => client.id === userId)
+  console.log(client)
   if (client && client.readyState === WebSocket.OPEN) {
     client.send(JSON.stringify(data));
   }
@@ -93,6 +96,7 @@ wss.on('connection', function connection(ws, req) {
     if (!checkAuth(this, cmd)) {
       return
     }
+    // console.log(message)
     const controller = controllers[cmd.topic] ? controllers[cmd.topic] : controllers['notfound']
     const res = typeof controller === 'function' ? await controller.apply(this, [cmd.fn]) : await controller[cmd.fn].apply(this, cmd.args)
     if (res) {
