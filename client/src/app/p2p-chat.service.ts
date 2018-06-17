@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { WebSocketService } from './websocket.service';
 import { AppStorageService } from './AppStorage.service';
-import { Command } from './models/Command';
 import { UserService } from './user.service';
-import { NewUser, UserStatus } from './models/User';
+import { WebSocketService } from './websocket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -44,11 +42,21 @@ export class P2pChatService {
     return []
   }
 
+  resetUnread(username: string) {
+    
+    const user = this.appStorage.users.get(username)
+    if (user) {
+      user.unreadMessages = 0
+      console.log('Borrar mensajes ' + username, user.unreadMessages)
+    }
+  }
+
   message(username: string, text: string) {
     console.log(`Message en p2p-chat-service: ${username}: ${text}`)
     const user = this.appStorage.users.get(username)
     if (user) {
       user.messages.push({ type: 'text', name: username, text })
+      user.unreadMessages++
     } else {
       console.log(`El usuario ${username} no reconocido le ha enviado: ${text}`)
     }

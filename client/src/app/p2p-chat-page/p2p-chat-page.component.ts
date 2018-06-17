@@ -1,10 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { UserService } from '../user.service';
-import { WebSocketService } from '../websocket.service';
-import { P2pChatService } from '../p2p-chat.service';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { ChatMessage } from '../models/ChatMessage';
-import { Subscription } from 'rxjs/Subscription';
+import { P2pChatService } from '../p2p-chat.service';
 
 /**
  * Debido a que la API RTCDataChannel (https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel)
@@ -19,13 +16,24 @@ export class P2pChatPageComponent {
   messages: ChatMessage[] = []
   remoteUser: string
   //private p2pchatSubscription: Subscription;
+  private previousRoute  = ""
   
-  constructor(private p2pChatService: P2pChatService, private route: ActivatedRoute) {
+  constructor(private p2pChatService: P2pChatService, private route: ActivatedRoute, private router: Router) {
     //this.p2pchatSubscription = this.webSocketService.subscribe('p2pchat', this) // TODO auto scroll down on message
     this.route.params.subscribe(params => {
+      p2pChatService.resetUnread(this.remoteUser)
       this.remoteUser = params['user']
       this.messages = p2pChatService.getMessagesOf(this.remoteUser)
       console.log('Remote user: ' + this.remoteUser)
+    })
+
+    this.router.events.subscribe(val => {
+      if (val instanceof NavigationStart) {
+        if (this.previousRoute.includes('/p2p-chat/')) {
+          this.p2pChatService.resetUnread(this.remoteUser)
+        }
+        this.previousRoute = val.url;
+      }
     })
   }
 

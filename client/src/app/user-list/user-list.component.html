@@ -2,10 +2,7 @@
   <a mat-list-item routerLinkActive="sidenav-item-selected" [routerLink]="['/p2p-chat', user.name]">
     <mat-icon mat-list-icon [class.connected]="user.status==userStatus.Connected">face</mat-icon>
     <span mat-line>{{user.name}}</span>
-
-    <!--<button mat-icon-button (click)="showInfo(user)">
-        <mat-icon>info</mat-icon>
-     </button>-->
+    <div class="badge" *ngIf="user.unreadMessages">{{user.unreadMessages}}</div>
   </a>
 </ng-container>
 <a mat-list-item *ngIf="userslist.size === 0" style="pointer-events: none">

@@ -8,3 +8,18 @@
     color: #D50000;
 }
 
+.badge {
+    color: #fff;
+    background: #2ac853;
+    padding: 5px 5px;
+    border-radius: 50%;
+    line-height: 1;
+    font-weight: 600;
+    font-size: 12px;
+    min-width: 12px;
+    text-align: center;
+}
+
+.sidenav-item-selected .badge {
+    display: none;
+}
