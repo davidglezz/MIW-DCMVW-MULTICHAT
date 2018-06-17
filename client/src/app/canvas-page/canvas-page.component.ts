@@ -7,11 +7,11 @@ import { WebSocketService } from '../websocket.service';
 declare const fabric: any;
 
 @Component({
-  selector: 'app-canvas',
-  templateUrl: './canvas.component.html',
-  styleUrls: ['./canvas.component.css']
+  selector: 'app-canvas-page',
+  templateUrl: './canvas-page.component.html',
+  styleUrls: ['./canvas-page.component.css']
 })
-export class CanvasComponent implements OnInit, OnDestroy {
+export class CanvasPageComponent implements OnInit, OnDestroy {
   loaded = false
   private canvasSubscription: Subscription
   private canvas

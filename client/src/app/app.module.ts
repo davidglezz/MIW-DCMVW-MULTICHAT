@@ -16,7 +16,7 @@ import { WebrtcCallService } from './webrtc-call.service';
 import { P2pChatPageComponent } from './p2p-chat-page/p2p-chat-page.component';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './customReuseStrategy';
-import { CanvasComponent } from './canvas/canvas.component';
+import { CanvasPageComponent } from './canvas-page/canvas-page.component';
 import { MapValuesPipe } from './map-values.pipe';
 import { UserListComponent } from './user-list/user-list.component';
 import 'hammerjs';
@@ -30,7 +30,7 @@ import { AboutPageComponent } from './about-page/about-page.component';
     ChatPageComponent,
     LoginPageComponent,
     P2pChatPageComponent,
-    CanvasComponent,
+    CanvasPageComponent,
     MapValuesPipe,
     UserListComponent,
     AboutPageComponent
