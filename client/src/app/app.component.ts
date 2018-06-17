@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { WebSocketService } from './websocket.service';
 import { Subscription } from 'rxjs/Subscription';
-import { Command } from './models/Command';
-import { UserService } from './user.service';
 import { P2pChatService } from './p2p-chat.service';
+import { UserService } from './user.service';
+import { WebSocketService } from './websocket.service';
 
 @Component({
   selector: 'app-root',

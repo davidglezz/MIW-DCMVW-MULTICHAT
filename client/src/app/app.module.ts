@@ -7,7 +7,7 @@ import { MatMenuModule, MatToolbarModule, MatButtonModule, MatCheckboxModule, Ma
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ChatPageComponent } from './chat-page/chat-page.component';
-import { LoginComponent } from './login/login.component';
+import { LoginPageComponent } from './login-page/login-page.component';
 import { WebSocketService } from './websocket.service';
 import { AppStorageService } from './AppStorage.service';
 import { UserService } from './user.service';
@@ -27,7 +27,7 @@ import 'hammer-timejs';
   declarations: [
     AppComponent,
     ChatPageComponent,
-    LoginComponent,
+    LoginPageComponent,
     P2pChatPageComponent,
     CanvasComponent,
     MapValuesPipe,

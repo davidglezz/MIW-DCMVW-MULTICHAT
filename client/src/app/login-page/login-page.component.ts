@@ -5,11 +5,11 @@ import { Subscription } from 'rxjs/Subscription';
 import { UserService } from '../user.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-login-page',
+  templateUrl: './login-page.component.html',
+  styleUrls: ['./login-page.component.css']
 })
-export class LoginComponent {
+export class LoginPageComponent {
   sampleUsers = ['david', 'susana', 'ana', 'adrian', 'test']
 
   constructor(private userService: UserService) { }

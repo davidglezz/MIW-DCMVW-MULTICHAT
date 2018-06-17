@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ChatPageComponent } from './chat-page/chat-page.component';
-import { LoginComponent } from './login/login.component';
+import { LoginPageComponent } from './login-page/login-page.component';
 import { P2pChatPageComponent } from './p2p-chat-page/p2p-chat-page.component';
 import { CanvasComponent } from './canvas/canvas.component';
 
 const routes: Routes = [
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginPageComponent
   },
   {
     path: 'chat',
