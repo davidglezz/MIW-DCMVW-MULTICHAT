@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { Base64 } from '../Base64';
 import { UserService } from '../user.service';
 import { WebSocketService } from '../websocket.service';
-import { Subscription } from 'rxjs/Subscription';
-import { Command } from '../models/Command';
 
 declare const fabric: any;
 
@@ -12,9 +11,9 @@ declare const fabric: any;
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.css']
 })
-export class CanvasComponent implements OnInit {
+export class CanvasComponent implements OnInit, OnDestroy {
   loaded = false
-  private socketSubscription: Subscription
+  private canvasSubscription: Subscription
   private canvas
   private wrapper: HTMLElement
   private selectedObject = null
@@ -25,11 +24,7 @@ export class CanvasComponent implements OnInit {
   private lineWidth = 10
 
   constructor(private webSocketService: WebSocketService, private userService: UserService) {
-    this.webSocketService.connect()
-    this.socketSubscription = this.webSocketService.getTopic('canvas').subscribe((message: Command) => {
-      if (this[message.fn])
-        this[message.fn].apply(this, message.args)
-    })
+    this.canvasSubscription = this.webSocketService.subscribe('canvas', this)
   }
 
   ngOnInit() {
@@ -201,5 +196,9 @@ export class CanvasComponent implements OnInit {
 
   toJSON() {
     return this.canvas.toJSON()
+  }
+
+  ngOnDestroy() {
+    this.canvasSubscription.unsubscribe()
   }
 }

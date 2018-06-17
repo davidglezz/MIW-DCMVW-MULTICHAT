@@ -14,14 +14,8 @@ export class P2pChatService {
   private p2pchatSubscription: Subscription;
   
   constructor(private webSocketService: WebSocketService, private appStorage: AppStorageService, private userService: UserService) {
-    this.userSubscription = this.webSocketService.getTopic('user').subscribe((message: Command) => {
-      if (this[message.fn])
-        this[message.fn].apply(this, message.args)
-    })
-    this.p2pchatSubscription = this.webSocketService.getTopic('p2pchat').subscribe((message: Command) => {
-      if (this[message.fn])
-        this[message.fn].apply(this, message.args)
-    })
+    this.userSubscription = this.webSocketService.subscribe('user', this)
+    this.p2pchatSubscription = this.webSocketService.subscribe('p2pchat', this)
   }
 
   sendMessage(to: string, text: string) {

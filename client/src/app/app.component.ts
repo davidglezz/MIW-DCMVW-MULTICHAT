@@ -11,13 +11,9 @@ import { UserService } from './user.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnDestroy, OnInit {
-  private socketSubscription: Subscription;
+  private alertSubscription: Subscription;
   constructor(public webSocketService: WebSocketService, public snackBar: MatSnackBar, public userService: UserService) {
-    this.webSocketService.connect()
-    this.socketSubscription = this.webSocketService.getTopic('alert').subscribe((message: Command) => {
-      if (this[message.fn])
-        this[message.fn].apply(this, message.args)
-    })
+    this.alertSubscription = this.webSocketService.subscribe('alert', this)
   }
 
   ngOnInit() {
@@ -33,6 +29,6 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.socketSubscription.unsubscribe()
+    this.alertSubscription.unsubscribe()
   }
 }

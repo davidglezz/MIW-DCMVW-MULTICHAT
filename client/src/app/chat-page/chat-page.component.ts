@@ -16,15 +16,8 @@ export class ChatPageComponent implements OnInit, OnDestroy {
   messages: ChatMessage[] = []
 
   constructor(private webSocketService: WebSocketService, private userService: UserService) {
-    this.webSocketService.connect()
-    this.userSubscription = this.webSocketService.getTopic('user').subscribe((message: Command) => {
-      if (this[message.fn])
-        this[message.fn].apply(this, message.args)
-    })
-    this.chatSubscription = this.webSocketService.getTopic('chat').subscribe((message: Command) => {
-      if (this[message.fn])
-        this[message.fn].apply(this, message.args)
-    })
+    this.userSubscription = this.webSocketService.subscribe('user', this)
+    this.chatSubscription = this.webSocketService.subscribe('chat', this)
   }
 
   ngOnInit() {  }

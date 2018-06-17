@@ -70,7 +70,16 @@ export class WebSocketService {
     if (!this.topics[topic]) {
       this.topics[topic] = new Subject()
     }
+    // this.connect()
     return this.topics[topic]
+  }
+
+  public subscribe(topic: string, handler: any): Subscription {
+    return this.getTopic(topic).subscribe((message: Command) => {
+      if (handler[message.fn]) {
+        handler[message.fn].apply(handler, message.args)
+      }
+    })
   }
 
   public send(obj: Command): void {

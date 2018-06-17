@@ -13,10 +13,7 @@ export class UserService implements OnDestroy {
   private userSubscription: Subscription;
 
   constructor(private webSocketService: WebSocketService, private router: Router, private appStorage: AppStorageService) {
-    this.userSubscription = this.webSocketService.getTopic('user').subscribe((message: Command) => {
-      if (this[message.fn])
-        this[message.fn].apply(this, message.args)
-    })
+    this.userSubscription = this.webSocketService.subscribe('user', this)
   }
 
   public login(user: string, pass: string) {
