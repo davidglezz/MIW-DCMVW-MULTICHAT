@@ -21,6 +21,7 @@ import { MapValuesPipe } from './map-values.pipe';
 import { UserListComponent } from './user-list/user-list.component';
 import 'hammerjs';
 import 'hammer-timejs';
+import { AboutPageComponent } from './about-page/about-page.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import 'hammer-timejs';
     P2pChatPageComponent,
     CanvasComponent,
     MapValuesPipe,
-    UserListComponent
+    UserListComponent,
+    AboutPageComponent
   ],
   imports: [
     BrowserModule,
