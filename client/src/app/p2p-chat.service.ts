@@ -12,7 +12,7 @@ import { NewUser, UserStatus } from './models/User';
 export class P2pChatService {
   private userSubscription: Subscription;
   private p2pchatSubscription: Subscription;
-  
+
   constructor(private webSocketService: WebSocketService, private appStorage: AppStorageService, private userService: UserService) {
     this.userSubscription = this.webSocketService.subscribe('user', this)
     this.p2pchatSubscription = this.webSocketService.subscribe('p2pchat', this)
@@ -22,10 +22,10 @@ export class P2pChatService {
     const user = this.appStorage.users.get(to)
     if (!user || !text)
       return
-    
+
     user.messages.push({
-      type: 'text', 
-      name: this.userService.currentUser.name, 
+      type: 'text',
+      name: this.userService.currentUser.name,
       text
     })
     this.webSocketService.send({
@@ -44,18 +44,18 @@ export class P2pChatService {
     return []
   }
 
-  message(username, text) {
-    console.log("message en p2p-chat-service")
+  message(username: string, text: string) {
+    console.log(`Message en p2p-chat-service: ${username}: ${text}`)
     const user = this.appStorage.users.get(username)
     if (user) {
-      user.messages.push({ type: 'text', name, text })
+      user.messages.push({ type: 'text', name: username, text })
     } else {
       console.log(`El usuario ${username} no reconocido le ha enviado: ${text}`)
     }
   }
 
-  notify(username, text) {
-    console.log("notify en p2p-chat-service")
+  notify(username: string, text: string) {
+    console.log(`Notify en p2p-chat-service: ${text}`)
     const user = this.appStorage.users.get(username)
     if (user) {
       user.messages.push({ type: 'notify', text })

@@ -18,8 +18,8 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() { 
     this.usersUpdateSubscription = this.appStorage.usersChange.subscribe(users => {
-      console.log("updated", this.userslist)
       this.userslist = Array.from(users.values())
+      console.log("updated", this.userslist, Array.from(this.appStorage.users.values()))
       // this.ref.markForCheck()
       // this.ref.tick();
       // this.ref.detectChanges();

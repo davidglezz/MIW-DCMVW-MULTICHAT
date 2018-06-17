@@ -42,7 +42,7 @@ export class UserService implements OnDestroy {
 
   private updateUserList(userlist: User[]) {
     this.appStorage.users.forEach((user, key, users) => {
-      if (user.messages.length > 0) {
+      if (user.messages.find(m => m.type === 'text')) {
         user.status = UserStatus.Disconnected
       } else {
         users.delete(key)
@@ -51,14 +51,14 @@ export class UserService implements OnDestroy {
 
     userlist.forEach(user => {
       if (user.name !== this.currentUser.name) {
-        if (this.appStorage.users.has(name)) {
-          this.appStorage.users.get(name).status = UserStatus.Connected
+        const connectedUser = this.appStorage.users.get(user.name)
+        if (connectedUser) {
+          connectedUser.status = UserStatus.Connected
         } else {
-          this.appStorage.users.set(name, NewUser(user.id, user.name))
+          this.appStorage.users.set(user.name, NewUser(user.id, user.name))
         }
       }
     });
-
     this.appStorage.notifyUsersChange()
   }
 
@@ -68,8 +68,9 @@ export class UserService implements OnDestroy {
   }
 
   private userConnect(id: string, name: string) {
-    if (this.appStorage.users.has(name)) {
-      this.appStorage.users.get(name).status = UserStatus.Connected
+    const connectedUser = this.appStorage.users.get(name)
+    if (connectedUser) {
+      connectedUser.status = UserStatus.Connected
     } else {
       this.appStorage.users.set(name, NewUser(id, name))
     }
