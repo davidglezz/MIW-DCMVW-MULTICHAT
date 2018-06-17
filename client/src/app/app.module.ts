@@ -22,6 +22,7 @@ import { UserListComponent } from './user-list/user-list.component';
 import 'hammerjs';
 import 'hammer-timejs';
 import { AboutPageComponent } from './about-page/about-page.component';
+import { RadioPlayerComponent } from './radio-player/radio-player.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { AboutPageComponent } from './about-page/about-page.component';
     CanvasPageComponent,
     MapValuesPipe,
     UserListComponent,
-    AboutPageComponent
+    AboutPageComponent,
+    RadioPlayerComponent
   ],
   imports: [
     BrowserModule,

@@ -5,6 +5,11 @@
   box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
 }
 
+#menu-button {
+  min-width: 0px;
+  margin-right: 1rem;
+}
+
 .app-toolbar-filler {
   flex: 1 1 auto;
 }
