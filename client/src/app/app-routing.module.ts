@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ChatPageComponent } from './chat-page/chat-page.component';
 import { LoginComponent } from './login/login.component';
-import { P2pChatComponent } from './p2p-chat/p2p-chat.component';
+import { P2pChatPageComponent } from './p2p-chat-page/p2p-chat-page.component';
 import { CanvasComponent } from './canvas/canvas.component';
 
 const routes: Routes = [
@@ -20,7 +20,7 @@ const routes: Routes = [
   },
   {
     path: 'p2p-chat/:user',
-    component: P2pChatComponent
+    component: P2pChatPageComponent
   },
   {
     path: '**',

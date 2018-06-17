@@ -10,7 +10,7 @@ import { ChatPageComponent } from './chat-page/chat-page.component';
 import { LoginComponent } from './login/login.component';
 import { WebSocketService } from './websocket.service';
 import { UserService } from './user.service';
-import { P2pChatComponent } from './p2p-chat/p2p-chat.component';
+import { P2pChatPageComponent } from './p2p-chat-page/p2p-chat-page.component';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './customReuseStrategy';
 import { CanvasComponent } from './canvas/canvas.component';
@@ -22,8 +22,8 @@ import 'hammer-timejs';
     AppComponent,
     ChatPageComponent,
     LoginComponent,
-    P2pChatComponent,
     CanvasComponent
+    P2pChatPageComponent,
   ],
   imports: [
     BrowserModule,

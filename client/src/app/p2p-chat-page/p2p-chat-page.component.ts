@@ -12,11 +12,11 @@ import { ChatMessage } from '../models/ChatMessage';
  * todavía es poco soportada por los navegadores, los mensajes de texto serán enviados mediante websokets.
  */
 @Component({
-  selector: 'app-p2p-chat',
-  templateUrl: './p2p-chat.component.html',
-  styleUrls: ['./p2p-chat.component.css']
+  selector: 'app-p2p-chat-page',
+  templateUrl: './p2p-chat-page.component.html',
+  styleUrls: ['./p2p-chat-page.component.css']
 })
-export class P2pChatComponent implements OnInit {
+export class P2pChatPageComponent implements OnInit {
   private userSubscription: Subscription;
   private p2pchatSubscription: Subscription;
   messages: ChatMessage[] = []
@@ -31,8 +31,8 @@ export class P2pChatComponent implements OnInit {
   constructor(private webSocketService: WebSocketService, private userService: UserService, private route: ActivatedRoute) {
     this.route.params.subscribe(params => {
       this.remoteUser = params['user']
-
-    }).unsubscribe()
+      console.log('Remote user: ' + this.remoteUser)
+    })//.unsubscribe()
 
     this.webSocketService.connect()
     this.userSubscription = this.webSocketService.getTopic('user').subscribe((message: Command) => {
@@ -50,7 +50,6 @@ export class P2pChatComponent implements OnInit {
   }
   
   message(name, text) {
-    console.log(name, text)
     if (name === this.remoteUser)
       this.messages.push({type: 'text', name, text})
   }
@@ -62,7 +61,11 @@ export class P2pChatComponent implements OnInit {
 
   sendMessage(text) {
     if (text) {
-      this.message(this.userService.currentUser.name, text);
+      this.messages.push({
+        type: 'text', 
+        name: this.userService.currentUser.name, 
+        text: text
+      })
       this.webSocketService.send({
         topic: 'p2pchat',
         fn: 'message',
@@ -93,6 +96,7 @@ export class P2pChatComponent implements OnInit {
 
   // WebRTC
   async ngOnInit() {
+    console.log('ngOnInit')
     this.listdevices()
   }
 
