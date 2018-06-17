@@ -7,7 +7,7 @@ const Command = require('./model/command');
 
 /* Connect to database */
 (async function () {
-  /* await */mongoose.connect('mongodb://156.35.98.110:32768/persistence')
+  /* await */mongoose.connect('mongodb://156.35.98.110:32769/persistence')
   const db = mongoose.connection
   db.on('error', err => console.error('connection error:', err))
   db.once('open', () => console.info('Connected to the database.'))
@@ -37,14 +37,32 @@ wss.broadcast = function broadcast(data, notme) {
 };
 
 // Send data to some user
-wss.sendToUser = function sendToUser(userId, data) {
-  console.log(wss.send instanceof Function, wss.clients instanceof Array)
+wss.sendToUser = function sendToUser(username, data) {
   //const client = wss.clients.find(client => client.id === userId)
-  const client = Array.prototype.find.call(wss.clients, client => client.id === userId)
-  console.log(client)
+  //const client = Array.prototype.find.call(wss.clients, client => client.id === userId)
+  /*let client;
+  for (let i in wss.clients) {
+    console.log(JSON.stringify(wss.clients[i].user))
+    if (wss.clients[i].user && wss.clients[i].user.username === username) {
+      client = wss.clients[i];
+      break;
+    }
+  }*/
+/*
   if (client && client.readyState === WebSocket.OPEN) {
     client.send(JSON.stringify(data));
+  } else {
+    console.log('Cliente no encontrado', client)
   }
+*/
+
+  wss.clients.forEach(function each(client) {
+    if (client.readyState === WebSocket.OPEN && client.user && client.user.username === username) {
+      client.send(JSON.stringify(data));
+    }
+  });
+  
+  
 };
 
 // close missed connections
