@@ -1,5 +1,8 @@
 <mat-toolbar color="primary" class="app-toolbar">
   <mat-toolbar-row>
+    <button id="menu-button" type="button" mat-button (click)="drawer.toggle()" *ngIf="userService.isLoggedIn">
+      <mat-icon>menu</mat-icon>
+    </button>
     <span>WebSocket-WebRTC-Chat</span>
     <span class="app-toolbar-filler"></span>
     <span *ngIf="userService.isLoggedIn">{{userService.currentUser.name}}</span>
@@ -10,7 +13,7 @@
 </mat-toolbar>
 
 <mat-sidenav-container class="app-content">
-  <mat-sidenav mode="side" [opened]="userService.isLoggedIn">
+  <mat-sidenav #drawer mode="side" [opened]="userService.isLoggedIn">
     <mat-nav-list>
       <h3 matSubheader>General</h3>
       <a mat-list-item routerLinkActive="sidenav-item-selected" href="/chat" [routerLink]="['/chat']">
@@ -23,13 +26,15 @@
       </a>
       <mat-divider></mat-divider>
       <h3 matSubheader>Usuarios Conectados</h3>
-        <app-user-list></app-user-list>
+      <app-user-list></app-user-list>
       <mat-divider></mat-divider>
       <h3 matSubheader>About</h3>
       <a mat-list-item routerLinkActive="sidenav-item-selected" href="/about" [routerLink]="['/about']">
         <mat-icon mat-list-icon>help</mat-icon>
         <span mat-line>Information</span>
       </a>
+      <h3 matSubheader>Radio</h3>
+      <app-radio-player mat-list-item></app-radio-player>
 
     </mat-nav-list>
   </mat-sidenav>
