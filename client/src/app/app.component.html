@@ -23,19 +23,7 @@
       </a>
       <mat-divider></mat-divider>
       <h3 matSubheader>Usuarios Conectados</h3>
-      <ng-container *ngFor="let user of userService.allUsers">
-        <a *ngIf='!userService.currentUser || user.id !== userService.currentUser.id' mat-list-item routerLinkActive="sidenav-item-selected" [routerLink]="['/p2p-chat', user.name]">
-          <mat-icon mat-list-icon>face</mat-icon>
-          <span mat-line>{{user.name}}</span>
-          <!--<button mat-icon-button (click)="showInfo(user)">
-              <mat-icon>info</mat-icon>
-           </button>-->
-        </a>
-      </ng-container>
-      <a mat-list-item *ngIf="userService.allUsers.length < 2" style="pointer-events: none">
-        <mat-icon mat-list-icon>face</mat-icon>
-        <span mat-line>Ningún usuario</span>
-      </a>
+        <app-user-list></app-user-list>
       <mat-divider></mat-divider>
       <h3 matSubheader>About</h3>
       <a mat-list-item routerLinkActive="sidenav-item-selected" href="/about" [routerLink]="['/about']">

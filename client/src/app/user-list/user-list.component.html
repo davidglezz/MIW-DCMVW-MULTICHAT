@@ -1,0 +1,14 @@
+<ng-container *ngFor="let user of userslist">
+  <a mat-list-item routerLinkActive="sidenav-item-selected" [routerLink]="['/p2p-chat', user.name]">
+    <mat-icon mat-list-icon [class.connected]="user.status==userStatus.Connected">face</mat-icon>
+    <span mat-line>{{user.name}}</span>
+
+    <!--<button mat-icon-button (click)="showInfo(user)">
+        <mat-icon>info</mat-icon>
+     </button>-->
+  </a>
+</ng-container>
+<a mat-list-item *ngIf="userslist.size === 0" style="pointer-events: none">
+  <mat-icon mat-list-icon>face</mat-icon>
+  <span mat-line>Ningún usuario</span>
+</a>

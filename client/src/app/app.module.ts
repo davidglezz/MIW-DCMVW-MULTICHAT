@@ -14,6 +14,7 @@ import { P2pChatPageComponent } from './p2p-chat-page/p2p-chat-page.component';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './customReuseStrategy';
 import { CanvasComponent } from './canvas/canvas.component';
+import { UserListComponent } from './user-list/user-list.component';
 import 'hammerjs';
 import 'hammer-timejs';
 
@@ -22,8 +23,9 @@ import 'hammer-timejs';
     AppComponent,
     ChatPageComponent,
     LoginComponent,
-    CanvasComponent
     P2pChatPageComponent,
+    CanvasComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,
