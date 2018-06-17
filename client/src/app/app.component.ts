@@ -4,6 +4,7 @@ import { WebSocketService } from './websocket.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Command } from './models/Command';
 import { UserService } from './user.service';
+import { P2pChatService } from './p2p-chat.service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ import { UserService } from './user.service';
 })
 export class AppComponent implements OnDestroy, OnInit {
   private alertSubscription: Subscription;
-  constructor(public webSocketService: WebSocketService, public snackBar: MatSnackBar, public userService: UserService) {
+  constructor(public webSocketService: WebSocketService, public snackBar: MatSnackBar, public userService: UserService, public p2pchatService: P2pChatService) {
     this.alertSubscription = this.webSocketService.subscribe('alert', this)
   }
 
