@@ -10,13 +10,16 @@ import { ChatPageComponent } from './chat-page/chat-page.component';
 import { LoginComponent } from './login/login.component';
 import { WebSocketService } from './websocket.service';
 import { UserService } from './user.service';
+import { AppStorageService } from './AppStorage.service';
 import { P2pChatPageComponent } from './p2p-chat-page/p2p-chat-page.component';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './customReuseStrategy';
 import { CanvasComponent } from './canvas/canvas.component';
+import { MapValuesPipe } from './map-values.pipe';
 import { UserListComponent } from './user-list/user-list.component';
 import 'hammerjs';
 import 'hammer-timejs';
+
 
 @NgModule({
   declarations: [
@@ -25,6 +28,7 @@ import 'hammer-timejs';
     LoginComponent,
     P2pChatPageComponent,
     CanvasComponent,
+    MapValuesPipe,
     UserListComponent
   ],
   imports: [
@@ -46,7 +50,7 @@ import 'hammer-timejs';
     MatProgressSpinnerModule,
     MatMenuModule
   ],
-  providers: [WebSocketService, UserService, { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }],
+  providers: [WebSocketService, AppStorageService, UserService, { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Command } from './models/Command';
 import { Router } from '@angular/router';
 import { User } from './models/User';
+import { AppStorageService } from './AppStorage.service';
 
 @Injectable()
 export class UserService implements OnDestroy {
@@ -12,7 +13,8 @@ export class UserService implements OnDestroy {
   public currentUser: User
   private socketSubscription: Subscription;
 
-  constructor(private webSocketService: WebSocketService, private router: Router) {
+  constructor(private webSocketService: WebSocketService, private router: Router, private appStorage: AppStorageService) {
+    this.users = appStorage.users;
     this.webSocketService.connect()
     this.socketSubscription = this.webSocketService.getTopic('user').subscribe((message: Command) => {
       if (this[message.fn])
