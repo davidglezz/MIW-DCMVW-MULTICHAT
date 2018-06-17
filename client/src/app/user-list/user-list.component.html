@@ -5,7 +5,7 @@
     <div class="badge" *ngIf="user.unreadMessages">{{user.unreadMessages}}</div>
   </a>
 </ng-container>
-<a mat-list-item *ngIf="userslist.size === 0" style="pointer-events: none">
+<a mat-list-item *ngIf="userslist.length === 0" style="pointer-events: none">
   <mat-icon mat-list-icon>face</mat-icon>
   <span mat-line>Ningún usuario</span>
 </a>
