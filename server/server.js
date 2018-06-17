@@ -21,7 +21,7 @@ const port = process.env.PORT || '80'
 app.set('port', port)
 app.use(express.static(__dirname + '/public'))
 app.get('*', function (req, res) {
-  res.sendFile('public/index.html')
+  res.sendFile(__dirname + '/public/index.html')
 })
 
 const server = http.createServer(app)
