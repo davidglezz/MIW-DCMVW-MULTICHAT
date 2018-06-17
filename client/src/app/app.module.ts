@@ -9,8 +9,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { ChatPageComponent } from './chat-page/chat-page.component';
 import { LoginComponent } from './login/login.component';
 import { WebSocketService } from './websocket.service';
-import { UserService } from './user.service';
 import { AppStorageService } from './AppStorage.service';
+import { UserService } from './user.service';
+import { P2pChatService } from './p2p-chat.service';
+import { WebrtcCallService } from './webrtc-call.service';
 import { P2pChatPageComponent } from './p2p-chat-page/p2p-chat-page.component';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './customReuseStrategy';
@@ -50,7 +52,7 @@ import 'hammer-timejs';
     MatProgressSpinnerModule,
     MatMenuModule
   ],
-  providers: [WebSocketService, AppStorageService, UserService, { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }],
+  providers: [WebSocketService, AppStorageService, UserService, P2pChatService, WebrtcCallService, { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
