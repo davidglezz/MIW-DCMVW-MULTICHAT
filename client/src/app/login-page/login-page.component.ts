@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
-import { WebSocketService } from '../websocket.service';
-import { Subscription } from 'rxjs/Subscription';
 import { UserService } from '../user.service';
 
 @Component({

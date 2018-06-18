@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { User } from './models/User';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class AppStorageService implements OnDestroy {

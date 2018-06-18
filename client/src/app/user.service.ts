@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { WebSocketService } from './websocket.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { Command } from './models/Command';
 import { Router } from '@angular/router';
 import { User, UserStatus, NewUser } from './models/User';

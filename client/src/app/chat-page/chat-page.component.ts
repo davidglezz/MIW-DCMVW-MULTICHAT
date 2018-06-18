@@ -1,9 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UserService } from '../user.service';
-import { Subscription } from 'rxjs/Subscription';
-import { WebSocketService } from '../websocket.service';
-import { Command } from '../models/Command';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ChatMessage } from '../models/ChatMessage';
+import { UserService } from '../user.service';
+import { WebSocketService } from '../websocket.service';
 
 @Component({
   selector: 'app-chat-page',

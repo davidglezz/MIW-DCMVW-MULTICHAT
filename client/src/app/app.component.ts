@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { P2pChatService } from './p2p-chat.service';
 import { UserService } from './user.service';
 import { WebSocketService } from './websocket.service';

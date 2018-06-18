@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { AppStorageService } from './AppStorage.service';
 import { UserService } from './user.service';
 import { WebSocketService } from './websocket.service';
