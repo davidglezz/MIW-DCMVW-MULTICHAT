@@ -17,7 +17,7 @@ const Command = require('./model/command');
 
 /* App server */
 const app = express()
-const port = process.env.PORT || '80'
+const port = process.env.PORT || '8011'
 app.set('port', port)
 app.use(express.static(__dirname + '/public'))
 app.get('*', function (req, res) {
@@ -38,31 +38,11 @@ wss.broadcast = function broadcast(data, notme) {
 
 // Send data to some user
 wss.sendToUser = function sendToUser(username, data) {
-  //const client = wss.clients.find(client => client.id === userId)
-  //const client = Array.prototype.find.call(wss.clients, client => client.id === userId)
-  /*let client;
-  for (let i in wss.clients) {
-    console.log(JSON.stringify(wss.clients[i].user))
-    if (wss.clients[i].user && wss.clients[i].user.username === username) {
-      client = wss.clients[i];
-      break;
-    }
-  }*/
-/*
-  if (client && client.readyState === WebSocket.OPEN) {
-    client.send(JSON.stringify(data));
-  } else {
-    console.log('Cliente no encontrado', client)
-  }
-*/
-
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN && client.user && client.user.username === username) {
       client.send(JSON.stringify(data));
     }
   });
-  
-  
 };
 
 // close missed connections
