@@ -14,7 +14,7 @@ export class WebSocketService {
   // Clasifico los mensajes entrantes en múltiples Observables
   private topics: { [key: string]: Subject<Command> } = {}
 
-  private static readonly URL = 'ws://' + window.location.hostname;
+  private static readonly URL = 'ws://' + window.location.host // hostname
 
   constructor() {
     this.getTopic('none').subscribe(message => {
